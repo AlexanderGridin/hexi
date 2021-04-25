@@ -1,0 +1,6 @@
+name = Excel import module by Hridin Oleksandr
+description = "Импорт каталога товаров из фалов excel"
+package = oren-vesta
+core = 7.x
+
+files[] = hexi.module

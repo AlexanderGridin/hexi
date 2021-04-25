@@ -1,0 +1,22 @@
+<?php
+/**
+ * Implements hook_enable().
+ */
+function vesta_exc_import_enable(){
+  drupal_mkdir('public://hexi_data');
+
+  drupal_mkdir('public://hexi_data/price_files');
+  drupal_mkdir('public://hexi_data/price_files/generated_skus');
+  
+  drupal_mkdir('public://hexi_data/images');
+  drupal_mkdir('public://hexi_data/images/1');
+  drupal_mkdir('public://hexi_data/images/2');
+
+  menu_rebuild();
+  cache_clear_all();
+}
+
+function vesta_exc_import_disable(){
+  menu_rebuild();
+  cache_clear_all();
+}

@@ -1,0 +1,322 @@
+<?php 
+/**
+ * Implements hook_menu().
+ */
+function hexi_menu(){
+  $items = array();
+
+  $items['admin/hexi-config'] = array(
+    'title' => 'Импорт/обновление товаров из Excel',
+    'description' => 'Настройка импорта/обновления товаров из файла Excel',
+    'page callback' => 'hexi_config',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/hexi_config.inc'
+  );
+
+  $items['hexi-check-config'] = array(
+    'title' => 'Проверка настроек импорта/обновления данных',
+    'description' => 'Страница проверки настроек импорта/обновления данных',
+    'page callback' => 'hexi_check_config',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/hexi_check_config.inc'
+  );
+
+  $items['hexi-data-processing-finished'] = array(
+    'title' => 'Обработка данных завершена',
+    'description' => 'Завершения обработки данных',
+    'page callback' => 'data_processing_finished',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/data_processing_finished.inc'
+  );
+
+  // TECH
+  $items['admin/hexi-config/clear-catalogue-item'] = array(
+    'title' => 'Очистить категорию каталога',
+    'description' => 'Страница очистки категории каталога',
+    'page callback' => 'clear_catalogue_category',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/clear_catalogue_category.inc'
+  );
+
+  /*
+  
+
+  $items['admin/get-excel-file/generate-products-sku'] = array(
+    'title' => 'Генерировать артикулы товаров',
+    'description' => 'Страница генерации артикулов товаров',
+    'page callback' => 'generate_products_sku',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/generate_products_sku.inc'
+  );
+
+  $items['admin/get-excel-file/check-products-sku-duplicates'] = array(
+    'title' => 'Проверка артикулов товаров на дублирование в БД',
+    'description' => 'Страница проверки артикулов товаров на дублирование в БД',
+    'page callback' => 'check_products_sku_duplicates',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/check_products_sku_duplicates.inc'
+  );
+
+  $items['admin/get-excel-file/check-products-sku-duplicates-in-file'] = array(
+    'title' => 'Проверка артикулов товаров на дублирование в файле',
+    'description' => 'Страница проверки артикулов товаров на дублирование в файле',
+    'page callback' => 'check_products_sku_duplicates_in_file',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/check_products_sku_duplicates_in_file.inc'
+  );
+  */
+
+  /*
+  $items['admin/get-excel-file/delete-excel-products'] = array(
+    'title' => 'Удалить товары',
+    'description' => 'Страница удаления товаров',
+    'page callback' => 'remove_excel_products_and_displays',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/remove_excel_products_and_displays.inc'
+  );
+  */
+
+  /*
+  $items['delete-excel-products-by-operation'] = array(
+    'title' => 'Удалить товары по операции',
+    'description' => 'Страница удаления товаров по операции',
+    'page callback' => 'remove_excel_products_and_displays_from_operation',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/remove_excel_products_and_displays_from_operation.inc'
+  );
+
+  $items['admin/get-excel-file/delete-excel-products-by-import_id'] = array(
+    'title' => 'Удалить товары по идентификатору импорта',
+    'description' => 'Страница удаления товаров по идентификатору импорта',
+    'page callback' => 'remove_excel_products_and_displays_by_import_id',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/remove_excel_products_and_displays_by_import_id.inc'
+  );
+
+  $items['deleteting-by-operation-complete'] = array(
+    'title' => 'Удаление товаров по операции завершено',
+    'description' => 'Страница успешного завершения удаления товаров по операции',
+    'page callback' => 'deleting_by_operation_complete',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/deleting_by_operation_complete.inc'
+  );
+
+  $items['admin/get-excel-file/excel-import-history'] = array(
+    'title' => 'История операций',
+    'description' => 'Страница истории операций',
+    'page callback' => 'excel_import_history',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/excel_import_history.inc'
+  );
+
+  $items['import-excel-file-data'] = array(
+    'title' => 'Импорт данных из файла Excel',
+    'description' => 'Страница импорта данных из файла Excel',
+    'page callback' => 'import_excel_file_data',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/import_excel_file_data.inc'
+  );
+
+  $items['update-excel-file-data'] = array(
+    'title' => 'Обновление данных из файла Excel',
+    'description' => 'Страница обновления данных из файла Excel',
+    'page callback' => 'update_excel_file_data',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/update_excel_file_data.inc'
+  );
+
+  $items['check-products-for-remove'] = array(
+    'title' => 'Проверка товаров сайта на отсутствие в прайсе',
+    'description' => 'Страница проверки товаров сайта на отсутствие в прайсе',
+    'page callback' => 'check_products_for_remove',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/check_products_for_remove.inc'
+  );
+
+  
+
+  $items['start-excel-data-proceed'] = array(
+    'title' => 'Импорт данных из файла Excel',
+    'description' => 'Страница импорта данных из файла Excel',
+    'page callback' => 'start_excel_data_proceed',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_start_excel_data_proceed.inc'
+  );
+
+  $items['data-processing-finished'] = array(
+    'title' => 'Обработка данных завершена',
+    'description' => 'Завершения обработки данных',
+    'page callback' => 'data_processing_finished',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/data_processing_finished.inc'
+  );
+
+  $items['excel-import-from-file-test'] = array(
+    'title' => 'Импортировать товары из файла Excel',
+    'description' => 'Страница импорта товаров из Excel',
+    'page callback' => 'excel_import_from_file_test',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_from_file.inc'
+  );
+  */
+
+  /* ------------------------------------------------------------------ */
+  /* Темизируемые страницы
+  /* ------------------------------------------------------------------ */
+  /*
+  $items['import-complete'] = array(
+    'title' => 'Импорт товаров завершен',
+    'description' => 'Страница завершения импорта товаров',
+    'page callback' => 'excel_import_complete',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_pages.inc'
+  );
+
+  $items['products-delete-complete'] = array(
+    'title' => 'Удаление товаров завершено',
+    'description' => 'Страница завершения удаления товаров',
+    'page callback' => 'excel_products_delete_complete',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_pages.inc'
+  );
+  */
+
+  /* -------------------------------- */
+  /* Служебные страницы
+  /* -------------------------------- */
+  /*
+  $items['test-page'] = array(
+    'title' => 'Тестовая страница',
+    'description' => 'Тестовая страница',
+    'page callback' => 'test_page',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_pages.inc'
+  );
+
+  $items['clear-catalogue'] = array(
+    'title' => 'Очистить каталог',
+    'description' => 'Страница очистки каталога продукции',
+    'page callback' => 'clear_catalogue',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/vesta_exc_import_pages.inc'
+  );
+  */
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function hexi_theme(){
+  return array(
+    'hexi_config' => array(
+      'template' => 'templates/hexi_config',
+      'variables' => array(
+        'hexi_config_form' => NULL
+      ),
+    ),
+
+    'hexi_check_config' => array(
+      'template' => 'templates/hexi_check_config',
+      'variables' => array(
+        'active_config' => NULL,
+        'config_html' => '',
+        'config_confirmation_form' => NULL
+      ),
+    ),
+
+    'data_processing_finished' => array(
+      'template' => 'templates/data_processing_finished',
+      'variables' => array(
+        'hexi_file_data' => NULL
+      )
+    ),
+
+    'clear_catalogue_category' => array(
+      'template' => 'templates/clear_catalogue_category',
+      'variables' => array(
+        'clear_catalogue_category_form' => NULL
+      )
+    ),
+
+    /*
+    
+    'start_excel_import' => array(
+      'template' => 'templates/start-excel-import'
+    ),
+    
+    'generate_products_sku' => array(
+      'template' => 'templates/generate_products_sku'
+    ),
+    'check_products_sku_duplicates' => array(
+      'template' => 'templates/check_products_sku_duplicates'
+    ),
+    'remove_excel_products_and_displays' => array(
+      'template' => 'templates/remove_excel_products_and_displays'
+    ),
+    'excel_import_history' => array(
+      'template' => 'templates/excel_import_history'
+    ),
+    'deleting_by_operation_complete' => array(
+      'template' => 'templates/deleting_by_operation_complete'
+    ),
+    'remove_excel_products_and_displays_by_import_id' => array(
+      'template' => 'templates/remove_excel_products_and_displays_by_import_id'
+    ),
+    'check_products_sku_duplicates_in_file' => array(
+      'template' => 'templates/check_products_sku_duplicates_in_file'
+    ),
+
+    'excel_import' => array(
+      'template' => 'templates/excel-import'
+    ),
+    'excel_import_complete' => array(
+      'template' => 'templates/excel-import-complete'
+    ),
+    'excel_products_delete_complete' => array(
+      'template' => 'templates/excel-products-delete-complete'
+    ),
+    'test_page' => array(
+      'template' => 'templates/test-page'
+    ),
+    */
+  );
+}
+
+/**
+ * Функции определения роли пользователя
+ */
+function user_is_administrator(){
+  global $user;
+
+  return user_has_role(3, $user);
+}
+
+function user_is_authenticated(){
+  global $user;
+
+  return user_has_role(2, $user);
+}
