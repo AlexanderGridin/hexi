@@ -1,8 +1,23 @@
 <?php
+module_load_include('inc', 'hexi', '/lib/hexi_tools');
+
 /**
  * Implements hook_enable().
  */
-function vesta_exc_import_enable(){
+function hexi_enable(){
+  /* -------------------------------- */
+  /* Создаем необходимые словари таксономии
+  /* -------------------------------- */
+  // Общие словари
+  taxonomy_create_vocabulary('Бренды', 'product_brands');
+
+  // Словари по отдельным группам товаров
+  // -- Инструменты
+  taxonomy_create_vocabulary('Группы инструментов', 'tools_groups');
+
+  /* -------------------------------- */
+  /* Создаем необходимые папки
+  /* -------------------------------- */
   drupal_mkdir('public://hexi_data');
 
   drupal_mkdir('public://hexi_data/price_files');
@@ -16,7 +31,9 @@ function vesta_exc_import_enable(){
   cache_clear_all();
 }
 
-function vesta_exc_import_disable(){
+function hexi_disable(){
+  drupal_rmdir('public://hexi_data');
+
   menu_rebuild();
   cache_clear_all();
 }

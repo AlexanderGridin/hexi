@@ -32,6 +32,15 @@ function hexi_menu(){
     'file' => 'includes/data_processing_finished.inc'
   );
 
+  $items['hexi-import-data-from-file'] = array(
+    'title' => 'Импорт данных из файла',
+    'description' => 'Страница импорта данных из файла',
+    'page callback' => 'import_data_from_file',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'lib/import_data_from_file.inc'
+  );
+
   // TECH
   $items['admin/hexi-config/clear-catalogue-item'] = array(
     'title' => 'Очистить категорию каталога',
@@ -40,6 +49,24 @@ function hexi_menu(){
     'type' => MENU_LOCAL_TASK,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/clear_catalogue_category.inc'
+  );
+
+  $items['admin/hexi-config/clear-taxonomy-vocabulary'] = array(
+    'title' => 'Очистить словарь таксономии',
+    'description' => 'Страница очистки словаря таксономии',
+    'page callback' => 'clear_taxonomy_vocabulary',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/clear_taxonomy_vocabulary.inc'
+  );
+
+  $items['test-page'] = array(
+    'title' => 'Тестовая страница',
+    'description' => 'Тестовая страница',
+    'page callback' => 'test_page',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/test_page.inc'
   );
 
   /*
@@ -260,6 +287,18 @@ function hexi_theme(){
       'variables' => array(
         'clear_catalogue_category_form' => NULL
       )
+    ),
+
+    'clear_taxonomy_vocabulary' => array(
+      'template' => 'templates/clear_taxonomy_vocabulary',
+      'variables' => array(
+        'clear_taxonomy_vocabulary_form' => NULL,
+        'vocabularies_for_clearing_form_options' => 0
+      )
+    ),
+
+    'test_page' => array(
+      'template' => 'templates/test_page'
     ),
 
     /*

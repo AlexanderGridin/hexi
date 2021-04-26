@@ -8,7 +8,7 @@ module_load_include('inc', 'hexi', '/lib/hexi_tools');
 function hexi_config(){
   delete_variable_from_db('hexi_import_config');
   delete_variable_from_db('hexi_update_config');
-  delete_variable_from_db('hexi_sheet_rows_data');
+  delete_variable_from_db('hexi_file_data');
 
   /* -------------------------------- */
   /* Определяем форму с выбором настроек операции

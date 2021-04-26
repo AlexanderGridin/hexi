@@ -54,6 +54,5 @@ function update_config_confirmation_form($form, &$form_state){
 }
 
 function update_config_confirmation_submit($form, &$form_state){
-  // drupal_goto('/start-excel-data-proceed');
   prepare_data_for_processing();
 }

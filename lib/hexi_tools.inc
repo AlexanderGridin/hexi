@@ -1,5 +1,20 @@
 <?php
 // FUNCTIONS
+function taxonomy_create_vocabulary($name, $mashine_name){
+  $vocab = taxonomy_get_vocabulary_by_name($name);
+
+  if(isset($vocab)){
+    return;
+  } else {
+    $new_vocab = (object) array(
+      'name' => $name,
+      'machine_name' => $mashine_name,
+    );  
+
+    taxonomy_vocabulary_save($new_vocab);
+  }
+}
+
 function prepare_config_html($config){
   $operation_type = get_excel_import_readable_operation_type($config->operation_type);
   $product_type = commerce_product_type_get_name($config->product_type);
@@ -315,6 +330,24 @@ function generate_catalogue_parents_form_options_array($vocab_name){
 
     if(count($childrens) > 0){
       $options[$term->tid] = $term->name;
+    }
+  }
+
+  return $options;
+}
+
+function generate_taxonomy_vocabularies_form_options(){
+  $options = array();
+  $vocabularies = taxonomy_get_vocabularies();
+
+  foreach($vocabularies as $vocab){
+    $vocab_terms = taxonomy_get_tree($vocab->vid);
+
+    if(
+      count($vocab_terms) > 0 && 
+      ($vocab->name != 'Gallery collections' && $vocab->name != 'Теги' && $vocab->name != 'Каталог')
+    ){
+      $options[$vocab->vid] = $vocab->name;
     }
   }
 
