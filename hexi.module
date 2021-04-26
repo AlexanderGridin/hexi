@@ -23,14 +23,14 @@ function hexi_menu(){
     'file' => 'includes/hexi_check_config.inc'
   );
   
-    $items['hexi-import-parsed-data'] = array(
-      'title' => 'Импорт данных из файла',
-      'description' => 'Страница импорта данных из файла',
-      'page callback' => 'import_parsed_data',
-      'type' => MENU_NORMAL_ITEM,
-      'access callback' => 'user_is_administrator',
-      'file' => 'lib/import_parsed_data.inc'
-    );
+  $items['hexi-import-parsed-data'] = array(
+    'title' => 'Импорт данных из файла',
+    'description' => 'Страница импорта данных из файла',
+    'page callback' => 'import_parsed_data',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_is_administrator',
+    'file' => 'lib/import_parsed_data.inc'
+  );
 
   $items['hexi-data-processing-finished'] = array(
     'title' => 'Обработка данных завершена',
@@ -60,6 +60,16 @@ function hexi_menu(){
     'file' => 'includes/clear_taxonomy_vocabulary.inc'
   );
 
+  $items['admin/hexi-config/remove-products-by-import-id'] = array(
+    'title' => 'Удалить товары по идентификатору импорта',
+    'description' => 'Страница удаления товаров по идентификатору импорта',
+    'page callback' => 'remove_products_by_import_id',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/remove_products_by_import_id.inc'
+  );
+
+  // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
     'description' => 'Тестовая страница',
@@ -294,6 +304,13 @@ function hexi_theme(){
       'variables' => array(
         'clear_taxonomy_vocabulary_form' => NULL,
         'vocabularies_for_clearing_form_options' => 0
+      )
+    ),
+
+    'remove_products_by_import_id' => array(
+      'template' => 'templates/remove_products_by_import_id',
+      'variables' => array(
+        'remove_products_by_import_id_form' => NULL
       )
     ),
 
