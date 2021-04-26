@@ -1,0 +1,116 @@
+<?php 
+module_load_include('inc', 'hexi', '/lib/hexi_tools');
+module_load_include('inc', 'hexi', '/lib/product/product_functions');
+module_load_include('inc', 'hexi', '/lib/product/product_type_tools_functions');
+
+// Инициализация импорта
+function import_parsed_data(){
+  $import_config = variable_get('hexi_import_config');
+  $file_data = variable_get('hexi_file_data');
+
+  foreach($file_data as $row){
+    $operations[] = array('import_data', array($import_config, $row));
+  }
+
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'import_parsed_data_finished',
+    'title' => 'Обработка данных',
+    'init_message' => 'Подготовка данных',
+    'progress_message' => 'Выполнено @current из @total.',
+    'error_message' => 'Произошла ошибка.',
+    'file' => drupal_get_path('module', 'hexi') . '/lib/import_parsed_data.inc',
+  );
+
+  batch_set($batch);
+  batch_process('/hexi-data-processing-finished');
+}
+
+// Единичная операция импорта
+function import_data($import_config, $row, &$context){
+  // Создаем товары и их ноды
+  if(!empty($row['cells_data'][0])){
+    create_product($import_config, $row);
+    create_product_display($import_config, $row);
+
+    $context['results']['proceeded_products']++;
+  }
+
+  $context['results']['proceeded_rows']++;
+  $context['message'] = 'Обработана строка <em><strong>' . $context['results']['proceeded_rows'] . '</strong></em>';
+}
+
+// Окончание импорта
+function import_parsed_data_finished($success, $results, $operations){
+  if ($success) {
+    drupal_set_message('Обработано ' . $results['proceeded_rows'] . ' строк');
+    drupal_set_message('Из них ' . $results['proceeded_products'] . ' товаров');
+  }
+  else {
+    drupal_set_message('Завершено с ошибками.', 'error');
+  }
+}
+
+// Создание товара
+function create_product($import_config, $row){
+  $import_id = 'hexi_import_' . $import_config->filename;
+  $currency_code = 'RUB';
+
+  // Подготавливаем объект товара для заполнения
+  $product = commerce_product_new();
+
+  // Заполняем поля в зависимости от типа товара
+  if($import_config->product_type == 'product_tools'){
+    $product = fill_product_type_tools_fields_from_row($product, $row);
+  }
+
+  // Заполняем общие поля
+  $product->type = $import_config->product_type;
+  $product->field_product_import_id['und'][0]['value'] = $import_id;
+  $product->commerce_price['und'][0]['currency_code'] = $currency_code;
+
+  // Сохраняем товар
+  commerce_product_save($product);
+}
+
+// Создание ноды товара
+function create_product_display($import_config, $row){
+  $import_id = 'hexi_import_' . $import_config->filename;
+  $node_type = 'product_view';
+  $product = NULL;
+
+  // Получаем товар в зависимости от типа товара в конфиге
+  switch($import_config->product_type){
+    case 'product_tools':
+      $product = commerce_product_load_by_sku($row['cells_data'][3]);
+      break;
+  }
+
+  // Если товар есть на сайте - продолжаем
+  if(isset($product)){
+    // Генерируем отражение товара
+    $node = new stdClass();
+    $node->type = $node_type;
+    $category = new stdClass();
+
+    node_object_prepare($node);
+
+    // Получаем категорию каталога
+    $category->tid = $import_config->main_catalogue_category;
+
+    // Получаем название товара
+    $product_title = $product->title;
+
+    // Заполняем поля
+    $node->title = $product_title;
+    $node->field_artikul['und'][0]['product_id'] = $product->product_id;
+    // $node->field_product_category['und'][0]['tid'] = $category->tid;
+    $node->field_catalog['und'][0]['tid'] = $category->tid;
+    $node->field_product_import_id['und'][0]['value'] = $import_id;
+    $node->language = LANGUAGE_NONE;
+
+    // Сохраняем отражение товара
+    node_save($node);
+  }
+}
+

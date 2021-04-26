@@ -105,6 +105,6 @@ function parse_data_from_file(){
 
 function parse_data_from_file_finished($success, $results, $operations){
   if($success){
-    drupal_goto('/hexi-import-data-from-file');
+    drupal_goto('/hexi-import-parsed-data');
   }
 }

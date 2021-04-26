@@ -22,6 +22,15 @@ function hexi_menu(){
     'access callback' => 'user_is_administrator',
     'file' => 'includes/hexi_check_config.inc'
   );
+  
+    $items['hexi-import-parsed-data'] = array(
+      'title' => 'Импорт данных из файла',
+      'description' => 'Страница импорта данных из файла',
+      'page callback' => 'import_parsed_data',
+      'type' => MENU_NORMAL_ITEM,
+      'access callback' => 'user_is_administrator',
+      'file' => 'lib/import_parsed_data.inc'
+    );
 
   $items['hexi-data-processing-finished'] = array(
     'title' => 'Обработка данных завершена',
@@ -30,15 +39,6 @@ function hexi_menu(){
     'type' => MENU_NORMAL_ITEM,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/data_processing_finished.inc'
-  );
-
-  $items['hexi-import-data-from-file'] = array(
-    'title' => 'Импорт данных из файла',
-    'description' => 'Страница импорта данных из файла',
-    'page callback' => 'import_data_from_file',
-    'type' => MENU_NORMAL_ITEM,
-    'access callback' => 'user_is_administrator',
-    'file' => 'lib/import_data_from_file.inc'
   );
 
   // TECH
