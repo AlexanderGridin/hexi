@@ -69,6 +69,15 @@ function hexi_menu(){
     'file' => 'includes/remove_products_by_import_id.inc'
   );
 
+  $items['admin/hexi-config/check-products-sku-for-duplicates'] = array(
+    'title' => 'Проверка артикулов товаров на дублирование в БД',
+    'description' => 'Страница проверки артикулов товаров на дублирование в БД',
+    'page callback' => 'check_products_sku_for_duplicates',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/check_products_sku_for_duplicates.inc'
+  );
+
   // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
@@ -311,6 +320,13 @@ function hexi_theme(){
       'template' => 'templates/remove_products_by_import_id',
       'variables' => array(
         'remove_products_by_import_id_form' => NULL
+      )
+    ),
+
+    'check_products_sku_for_duplicates' => array(
+      'template' => 'templates/check_products_sku_for_duplicates',
+      'variables' => array(
+        'check_products_sku_for_duplicates_form' => NULL
       )
     ),
 
