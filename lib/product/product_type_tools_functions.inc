@@ -40,7 +40,7 @@ function fill_product_type_tools_fields_from_row($product, $row){
   $product->title = '(' . $unique_id . ')' . ' - ' . $name;
   $product->sku = $unique_id;
 
-  // Бренд
+  // -- Бренд
   $is_brand_on_site = is_brand_on_site($brand);
 
   if($is_brand_on_site){
@@ -53,7 +53,7 @@ function fill_product_type_tools_fields_from_row($product, $row){
     $product->field_product_brand['und'][0]['tid'] = $new_brand_term->tid;
   }
 
-  // Группа
+  // -- Группа
   $is_tools_group_on_site = is_tools_group_on_site($group);
 
   if($is_tools_group_on_site){
@@ -66,15 +66,15 @@ function fill_product_type_tools_fields_from_row($product, $row){
     $product->field_tools_group['und'][0]['tid'] = $new_group_term->tid;
   }
 
-  // Серия
+  // -- Серия
   $product->field_tools_serial['und'][0]['value'] = $series;
-  // Описание
+  // -- Описание
   $product->field_product_description['und'][0]['value'] = $description;
-  // Страна
+  // -- Страна
   $product->field_tools_country['und'][0]['value'] = $country;
-  // Размер
+  // -- Размер
   $product->field_tools_size['und'][0]['value'] = $size;
-  // Стоимость
+  // -- Стоимость
   $product->commerce_price['und'][0]['amount'] = $price;
 
   return $product;

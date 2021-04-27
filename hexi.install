@@ -15,24 +15,29 @@ function hexi_enable(){
   // -- Инструменты
   taxonomy_create_vocabulary('Группы инструментов', 'tools_groups');
 
+  // -- Краски
+  taxonomy_create_vocabulary('Назначения красок', 'appointments_of_paints');
+  taxonomy_create_vocabulary('Назначения красок в интерьере', 'appointments_of_paints_interior');
+  taxonomy_create_vocabulary('Подразделы красок', 'paints_subcategories');
+
   /* -------------------------------- */
   /* Создаем необходимые папки
   /* -------------------------------- */
   drupal_mkdir('public://hexi_data');
 
   drupal_mkdir('public://hexi_data/price_files');
-  drupal_mkdir('public://hexi_data/price_files/generated_skus');
+  // drupal_mkdir('public://hexi_data/price_files/generated_skus');
   
-  drupal_mkdir('public://hexi_data/images');
-  drupal_mkdir('public://hexi_data/images/1');
-  drupal_mkdir('public://hexi_data/images/2');
+  // drupal_mkdir('public://hexi_data/images');
+  // drupal_mkdir('public://hexi_data/images/1');
+  // drupal_mkdir('public://hexi_data/images/2');
 
   menu_rebuild();
   cache_clear_all();
 }
 
 function hexi_disable(){
-  drupal_rmdir('public://hexi_data');
+  // drupal_rmdir('public://hexi_data');
 
   menu_rebuild();
   cache_clear_all();

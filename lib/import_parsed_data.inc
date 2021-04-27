@@ -2,6 +2,7 @@
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
 module_load_include('inc', 'hexi', '/lib/product/product_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_tools_functions');
+module_load_include('inc', 'hexi', '/lib/product/product_type_paints_functions');
 
 // Инициализация импорта
 function import_parsed_data(){
@@ -64,6 +65,10 @@ function create_product($import_config, $row){
     $product = fill_product_type_tools_fields_from_row($product, $row);
   }
 
+  if($import_config->product_type == 'product_paints'){
+    $product = fill_product_type_paints_fields_from_row($product, $row);
+  }
+
   // Заполняем общие поля
   $product->type = $import_config->product_type;
   $product->field_product_import_id['und'][0]['value'] = $import_id;
@@ -82,6 +87,10 @@ function create_product_display($import_config, $row){
   // Получаем товар в зависимости от типа товара в конфиге
   switch($import_config->product_type){
     case 'product_tools':
+      $product = commerce_product_load_by_sku($row['cells_data'][3]);
+      break;
+
+    case 'product_paints':
       $product = commerce_product_load_by_sku($row['cells_data'][3]);
       break;
   }

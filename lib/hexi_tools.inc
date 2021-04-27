@@ -1,5 +1,17 @@
 <?php
 // FUNCTIONS
+function is_taxonomy_term_in_vocabulary($term_name, $voc_mashine_name){
+  $finded_terms = taxonomy_get_term_by_name($term_name, $voc_mashine_name);
+
+  if(count($finded_terms) == 1){
+    return true;
+  }
+
+  if(count($finded_terms) == 0){
+    return false;
+  }
+}
+
 function taxonomy_create_vocabulary($name, $mashine_name){
   $vocab = taxonomy_get_vocabulary_by_name($name);
 
