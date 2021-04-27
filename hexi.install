@@ -10,14 +10,14 @@ function hexi_enable(){
   /* -------------------------------- */
   // Общие словари
   taxonomy_create_vocabulary('Бренды', 'product_brands');
+  taxonomy_create_vocabulary('Назначения продукции', 'product_appointments');
+  taxonomy_create_vocabulary('Назначения продукции в интерьере', 'product_appointments_interior');
 
   // Словари по отдельным группам товаров
   // -- Инструменты
   taxonomy_create_vocabulary('Группы инструментов', 'tools_groups');
 
   // -- Краски
-  taxonomy_create_vocabulary('Назначения красок', 'appointments_of_paints');
-  taxonomy_create_vocabulary('Назначения красок в интерьере', 'appointments_of_paints_interior');
   taxonomy_create_vocabulary('Подразделы красок', 'paints_subcategories');
 
   /* -------------------------------- */

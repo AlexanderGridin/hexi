@@ -1,5 +1,16 @@
 <?php
 // FUNCTIONS
+function taxonomy_create_term_in_vocabulary($name, $vid){
+  $new_term = (object) array(
+    'vid' => $vid, 
+    'name' => $name,
+  );
+
+  taxonomy_term_save($new_term);
+
+  return $new_term;
+}
+
 function is_taxonomy_term_in_vocabulary($term_name, $voc_mashine_name){
   $finded_terms = taxonomy_get_term_by_name($term_name, $voc_mashine_name);
 

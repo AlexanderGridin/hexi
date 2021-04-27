@@ -1,6 +1,4 @@
 <?php 
-// module_load_include('inc', 'hexi', '/lib/hexi_tools');
-
 function fill_product_type_paints_fields_from_row($product, $row){
   // Идентифицируем поля
   $brand = $row['cells_data'][0];
@@ -83,133 +81,13 @@ function fill_product_type_paints_fields_from_row($product, $row){
   return $product;
 }
 
-// Назначение краски в интерьере
-function get_appoint_interrior_field_values_from_string($str){
-  // $str = str_replace(' ', '', $str);
-  if(!empty($str)){
-    $appoint_names = explode('/', $str);
-    $values = array();
-
-    foreach($appoint_names as $appoint){
-      $is_appoint_on_site = is_appoint_interrior_on_site($appoint);
-
-      if($is_appoint_on_site){
-        $appoint_term = current(taxonomy_get_term_by_name($appoint));
-        array_push($values, array(
-          'tid' => $appoint_term->tid,
-        ));
-      }
-
-      if(!$is_appoint_on_site && !is_null($is_appoint_on_site)){
-        $new_appoint = add_appoint_interrior_on_site($appoint);
-        array_push($values, array(
-          'tid' => $new_appoint->tid,
-        ));
-      }
-    }
-
-    return $values;
-  }
-}
-
-function is_appoint_interrior_on_site($appoint){
-  $finded_appoints = taxonomy_get_term_by_name($appoint, 'appointments_of_paints_interior');
-
-  if(count($finded_appoints) == 1){
-    return true;
-  }
-
-  if(count($finded_appoints) == 0){
-    return false;
-  }
-}
-
-function add_appoint_interrior_on_site($appoint){
-  $appoints_voc = taxonomy_get_vocabulary_by_name('Назначения красок в интерьере');
-
-  $new_appoint = (object) array(
-    'vid' => $appoints_voc->vid, 
-    'name' => $appoint,
-  );
-
-  taxonomy_term_save($new_appoint);
-  return $new_appoint;
-}
-
-// Назначение краски
-function get_appoint_field_values_from_string($str){
-  // $str = str_replace(' ', '', $str);
-  if(!empty($str)){
-    $appoint_names = explode('/', $str);
-    $values = array();
-
-    foreach($appoint_names as $appoint){
-      $is_appoint_on_site = is_appoint_on_site($appoint);
-
-      if($is_appoint_on_site){
-        $appoint_term = current(taxonomy_get_term_by_name($appoint));
-        array_push($values, array(
-          'tid' => $appoint_term->tid,
-        ));
-      }
-
-      if(!$is_appoint_on_site && !is_null($is_appoint_on_site)){
-        $new_appoint = add_appoint_on_site($appoint);
-        array_push($values, array(
-          'tid' => $new_appoint->tid,
-        ));
-      }
-    }
-
-    return $values;
-  }
-}
-
-function is_appoint_on_site($appoint){
-  $finded_appoints = taxonomy_get_term_by_name($appoint, 'appointments_of_paints');
-
-  if(count($finded_appoints) == 1){
-    return true;
-  }
-
-  if(count($finded_appoints) == 0){
-    return false;
-  }
-}
-
-function add_appoint_on_site($appoint){
-  $appoints_voc = taxonomy_get_vocabulary_by_name('Назначения красок');
-
-  $new_appoint = (object) array(
-    'vid' => $appoints_voc->vid, 
-    'name' => $appoint,
-  );
-
-  taxonomy_term_save($new_appoint);
-  return $new_appoint;
-}
-
 // Подразделы
 function is_paint_subcategory_on_site($subcategory_name){
-  $finded_subcategories = taxonomy_get_term_by_name($subcategory_name, 'paints_subcategories');
-
-  if(count($finded_subcategories) == 1){
-    return true;
-  }
-
-  if(count($finded_subcategories) == 0){
-    return false;
-  }
+  return is_taxonomy_term_in_vocabulary($subcategory_name, 'paints_subcategories');
 }
 
 function add_paint_subcategory_on_site($subcategory_name){
   $paint_subcategories_vocabulary = taxonomy_get_vocabulary_by_name('Подразделы красок');
 
-  $new_subcategory = (object) array(
-    'vid' => $paint_subcategories_vocabulary->vid, 
-    'name' => $subcategory_name,
-  );
-
-  taxonomy_term_save($new_subcategory);
-  return $new_subcategory;
+  return taxonomy_create_term_in_vocabulary($subcategory_name, $paint_subcategories_vocabulary->vid);
 }
