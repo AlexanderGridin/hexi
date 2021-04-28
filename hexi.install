@@ -9,10 +9,13 @@ function hexi_enable(){
   /* Создаем необходимые словари таксономии
   /* -------------------------------- */
   // Общие словари
+  taxonomy_create_vocabulary('Каталог продукции', 'product_catalogue');
   taxonomy_create_vocabulary('Бренды', 'product_brands');
   taxonomy_create_vocabulary('Назначения продукции', 'product_appointments');
   taxonomy_create_vocabulary('Назначения продукции в интерьере', 'product_appointments_interior');
   taxonomy_create_vocabulary('Коллекции производителей', 'manufacturer_collections');
+  taxonomy_create_vocabulary('Стили продукции', 'product_styles');
+  taxonomy_create_vocabulary('Видимые цвета', 'product_visible_colors');
 
   // Словари по отдельным группам товаров
   // -- Инструменты
@@ -20,6 +23,9 @@ function hexi_enable(){
 
   // -- Краски
   taxonomy_create_vocabulary('Подразделы красок', 'paints_subcategories');
+
+  // -- Ковры
+  taxonomy_create_vocabulary('Размеры ковров', 'carpets_sizes');
 
   /* -------------------------------- */
   /* Создаем необходимые папки

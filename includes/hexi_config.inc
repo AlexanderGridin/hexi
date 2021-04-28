@@ -96,6 +96,7 @@ function hexi_config(){
       ),
     );
 
+    /*
     $form['is_importing_images'] = array(
       '#type'          => 'radios',
       '#title'         => 'Прайс содержит изображения?',
@@ -129,11 +130,12 @@ function hexi_config(){
         ),
       ),
     );
+    */
 
     $form['main_catalogue_category'] = array(
       '#type'          => 'radios',
       '#title'         => 'Выберите категорию продукции в каталоге',
-      '#options'       => generate_catalogue_form_options_array('Каталог'),
+      '#options'       => generate_catalogue_form_options_array('Каталог продукции'),
       '#required'      => true,
       '#states' => array(
         'visible' => array(
@@ -144,6 +146,7 @@ function hexi_config(){
       ),
     );
 
+    /*
     $form['is_import_catalogue_before'] = array(
       '#type'          => 'radios',
       '#title'         => 'Импортировался ли каталог при импорте товаров?',
@@ -164,6 +167,7 @@ function hexi_config(){
         ),
       ),
     );
+    */
 
     // DEV
     /*

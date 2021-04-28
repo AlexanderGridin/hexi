@@ -58,15 +58,18 @@ function prepare_config_html($config){
         <p><strong>Тип товаров: </strong>$product_type</p>
         <p><strong>Начало обработки файла (номер строки файла Excel): </strong>$start_row</p>
         <p><strong>Конец обработки файла (номер строки файла Excel): </strong>$end_row</p>
-        <p><strong>Прайс содержит изображения: </strong>$is_importing_images</p>
-        <p><strong>Номер ячейки с изображением: </strong>$image_column_index</p>
-        <p><strong>Основная категория продукции: </strong>$main_catalogue_category</p>
-        <p><strong>Необходимо импортировать каталог: </strong>$is_importing_catalogue</p>
+        <p><strong>Категория продукции в каталоге: </strong>$main_catalogue_category</p>
       </div>
       <p>
         <a href=\"/admin/hexi-config\" class=\"bd-button\" style=\"margin-top: 15px;\">Вернуться назад и изменить данные</a>
       </p>
     ";
+
+    /*
+      <p><strong>Необходимо импортировать каталог: </strong>$is_importing_catalogue</p>
+      <p><strong>Прайс содержит изображения: </strong>$is_importing_images</p>
+      <p><strong>Номер ячейки с изображением: </strong>$image_column_index</p>
+    */
 
     return $import_str;
   }
@@ -368,7 +371,7 @@ function generate_taxonomy_vocabularies_form_options(){
 
     if(
       count($vocab_terms) > 0 && 
-      ($vocab->name != 'Gallery collections' && $vocab->name != 'Теги' && $vocab->name != 'Каталог')
+      ($vocab->name != 'Gallery collections' && $vocab->name != 'Теги' && $vocab->name != 'Каталог' && $vocab->name != 'Каталог продукции')
     ){
       $options[$vocab->vid] = $vocab->name;
     }
@@ -380,11 +383,9 @@ function generate_taxonomy_vocabularies_form_options(){
 function generate_catalogue_form_options_array($vocab_name){
   $options = array();
   $vocabulary = taxonomy_get_vocabulary_by_name($vocab_name);
-  // $vocabulary_parent_terms = taxonomy_get_tree($vocabulary->vid, 0, 1, TRUE);
   $vocabulary_parent_terms = taxonomy_get_tree($vocabulary->vid);
   
   foreach($vocabulary_parent_terms as $term){
-    // $options[$term->tid] = $term->name;
     $options[$term->tid] =  str_repeat('-', $term->depth) . ' ' . $term->name;
   }
 
