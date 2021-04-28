@@ -1,4 +1,15 @@
 <?php 
+// Коллекции
+function is_collection_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'manufacturer_collections');
+}
+
+function add_collection_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Коллекции производителей');
+
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
+}
+
 // Бренды
 function is_brand_on_site($brand_name){
   return is_taxonomy_term_in_vocabulary($brand_name, 'product_brands');

@@ -12,6 +12,7 @@ function hexi_enable(){
   taxonomy_create_vocabulary('Бренды', 'product_brands');
   taxonomy_create_vocabulary('Назначения продукции', 'product_appointments');
   taxonomy_create_vocabulary('Назначения продукции в интерьере', 'product_appointments_interior');
+  taxonomy_create_vocabulary('Коллекции производителей', 'manufacturer_collections');
 
   // Словари по отдельным группам товаров
   // -- Инструменты

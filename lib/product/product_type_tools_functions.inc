@@ -46,7 +46,7 @@ function fill_product_type_tools_fields_from_row($product, $row){
   // -- Описание
   $product->field_product_description['und'][0]['value'] = $description;
   // -- Страна
-  $product->field_tools_country['und'][0]['value'] = $country;
+  $product->field_product_country['und'][0]['value'] = $country;
   // -- Размер
   $product->field_tools_size['und'][0]['value'] = $size;
   // -- Стоимость
