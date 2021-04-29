@@ -5,16 +5,18 @@ function fill_product_type_carpet_fields_from_row($product, $row){
   $collection = $row['cells_data'][1];
   $composition = $row['cells_data'][2];
   $style = $row['cells_data'][3];
-  $name = $row['cells_data'][4];
-  $size = $row['cells_data'][5];
-  $group_unique_id = $row['cells_data'][6];
-  $unique_id = $row['cells_data'][7];
-  $country = $row['cells_data'][8];
-  $visible_color = $row['cells_data'][9];
-  $width = intval($row['cells_data'][10]) / 100; //получаем ширину в метрах
-  $length = intval($row['cells_data'][11]) / 100; //получаем длину в метрах
-  $form = $row['cells_data'][12];
-  $price = intval($row['cells_data'][13]) * 100;
+  // $name = $row['cells_data'][4];
+  $size = $row['cells_data'][4];
+  $group_unique_id = $row['cells_data'][5];
+  $unique_id = $row['cells_data'][6];
+  $country = $row['cells_data'][7];
+  $visible_color = $row['cells_data'][8];
+  $width = intval($row['cells_data'][9]) / 100; //получаем ширину в метрах
+  $length = intval($row['cells_data'][10]) / 100; //получаем длину в метрах
+  $form = $row['cells_data'][11];
+  $price = intval($row['cells_data'][12]) * 100;
+  $name = "$brand $group_unique_id ($size) коллекция $collection";
+
 
   // Устанавливаем соответствие полей
   // -- Название

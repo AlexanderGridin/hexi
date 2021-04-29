@@ -107,7 +107,7 @@ function create_product_display($import_config, $row){
       break;
 
     case 'product_carpet':
-      $product = commerce_product_load_by_sku($row['cells_data'][7]);
+      $product = commerce_product_load_by_sku($row['cells_data'][6]);
       break;
   }
 
@@ -116,7 +116,7 @@ function create_product_display($import_config, $row){
     create_display_for_single_product($product, $import_config);
   }
 
-  // Если товар есть на сайте и это ковер
+  // Если товар есть на сайте и это ковер - разбираемся с этой ситуацией
   if(isset($product) && $import_config->product_type == 'product_carpet'){
     handle_display_for_groupped_product($product, $import_config);
   }
