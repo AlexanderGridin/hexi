@@ -17,33 +17,10 @@ function fill_product_type_stucco_fields_from_row($product, $row){
   $product->title = $name;
   // -- Артикул
   $product->sku = $unique_id;
-
   // -- Бренд
-  $is_brand_on_site = is_brand_on_site($brand);
-
-  if($is_brand_on_site){
-    $brand_term = current(taxonomy_get_term_by_name($brand));
-    $product->field_product_brand['und'][0]['tid'] = $brand_term->tid;
-  } 
-
-  if(!$is_brand_on_site && !is_null($is_brand_on_site)){
-    $new_brand_term = add_brand_on_site($brand);
-    $product->field_product_brand['und'][0]['tid'] = $new_brand_term->tid;
-  }
-
+  fill_product_brand_field($product, $brand);
   // -- Коллекция
-  $is_collection_on_site = is_collection_on_site($collection);
-
-  if($is_collection_on_site){
-    $collection_term = current(taxonomy_get_term_by_name($collection));
-    $product->field_product_collection['und'][0]['tid'] = $collection_term->tid;
-  }
-  
-  if(!$is_collection_on_site && !is_null($is_collection_on_site)){
-    $new_collection_term = add_collection_on_site($collection);
-    $product->field_product_collection['und'][0]['tid'] = $new_collection_term->tid;
-  }
-
+  fill_product_collection_field($product, $collection);
   // -- Назначение материала
   $product->field_product_appoint['und'] = get_appoint_field_values_from_string($product_appoint);
   // -- Назначение в интерьере

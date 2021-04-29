@@ -4,6 +4,7 @@ module_load_include('inc', 'hexi', '/lib/product/product_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_tools_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_paints_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_stucco_functions');
+module_load_include('inc', 'hexi', '/lib/product/product_type_carpet_functions');
 
 // Инициализация импорта
 function import_parsed_data(){
@@ -73,6 +74,10 @@ function create_product($import_config, $row){
   if($import_config->product_type == 'stucco'){
     $product = fill_product_type_stucco_fields_from_row($product, $row);
   }
+  
+  if($import_config->product_type == 'product_carpet'){
+    $product = fill_product_type_carpet_fields_from_row($product, $row);
+  }
 
   // Заполняем общие поля
   $product->type = $import_config->product_type;
@@ -85,8 +90,6 @@ function create_product($import_config, $row){
 
 // Создание ноды товара
 function create_product_display($import_config, $row){
-  $import_id = 'hexi_import_' . $import_config->filename;
-  $node_type = 'product_view';
   $product = NULL;
 
   // Получаем товар в зависимости от типа товара в конфиге
@@ -102,10 +105,44 @@ function create_product_display($import_config, $row){
     case 'stucco':
       $product = commerce_product_load_by_sku($row['cells_data'][4]);
       break;
+
+    case 'product_carpet':
+      $product = commerce_product_load_by_sku($row['cells_data'][7]);
+      break;
   }
 
-  // Если товар есть на сайте - продолжаем
-  if(isset($product)){
+  // Если товар есть на сайте и это не ковер - создаем ноду, содержащую ссылку только на один товар
+  if(isset($product) && $import_config->product_type != 'product_carpet'){
+    create_display_for_single_product($product, $import_config);
+  }
+
+  // Если товар есть на сайте и это ковер
+  if(isset($product) && $import_config->product_type == 'product_carpet'){
+    handle_display_for_groupped_product($product, $import_config);
+  }
+}
+
+function handle_display_for_groupped_product($product, $import_config){
+  $import_id = 'hexi_import_' . $import_config->filename;
+  $node_type = 'product_view';
+  $products_group_sku = $product->field_product_group_sku['und'][0]['value'];
+  $is_products_group_node_on_site = is_products_group_node_on_site($product);
+
+  if($is_products_group_node_on_site){
+    $product_node = get_products_group_display_by_products_group_id($products_group_sku);
+    $product_reference = array(
+      'product_id' => $product->product_id
+    );
+
+    array_push($product_node->field_artikul['und'], $product_reference);
+    node_save($product_node);
+  }
+
+  if(!$is_products_group_node_on_site){
+    $product_reference = array(
+      'product_id' => $product->product_id
+    );
+
     // Генерируем отражение товара
     $node = new stdClass();
     $node->type = $node_type;
@@ -121,7 +158,8 @@ function create_product_display($import_config, $row){
 
     // Заполняем поля
     $node->title = $product_title;
-    $node->field_artikul['und'][0]['product_id'] = $product->product_id;
+    $node->field_artikul['und'][0] = $product_reference;
+    $node->field_products_group_sku['und'][0]['value'] = $product->field_product_group_sku['und'][0]['value'];
     // $node->field_product_category['und'][0]['tid'] = $category->tid;
     $node->field_catalog['und'][0]['tid'] = $category->tid;
     $node->field_product_import_id['und'][0]['value'] = $import_id;
@@ -130,5 +168,70 @@ function create_product_display($import_config, $row){
     // Сохраняем отражение товара
     node_save($node);
   }
+}
+
+function is_products_group_node_on_site($product){
+  $products_group_sku = $product->field_product_group_sku['und'][0]['value'];
+
+  // Запрашиваем ноду товара
+  $query = new EntityFieldQuery();
+  $product_display = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'product_view')
+    ->fieldCondition('field_products_group_sku', 'value', $products_group_sku, '=')
+    ->execute();
+
+  if(count($product_display) > 0 && count($product_display['node'] == 1)){
+    return true;
+  }
+
+  if(count($product_display) == 0){
+    return false;
+  }
+}
+
+function get_products_group_display_by_products_group_id($products_group_id){
+  // Запрашиваем ноду товара
+  $query = new EntityFieldQuery();
+  $product_display = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'product_view')
+    ->fieldCondition('field_products_group_sku', 'value', $products_group_id, '=')
+    ->execute();
+
+  if(count($product_display) > 0 && count($product_display['node'] == 1)){
+    $product_display = current($product_display['node']);
+    $product_display = node_load($product_display->nid);
+    return $product_display;
+  } else {
+    return NULL;
+  }
+}
+
+function create_display_for_single_product($product, $import_config){
+  $import_id = 'hexi_import_' . $import_config->filename;
+  $node_type = 'product_view';
+
+  // Генерируем отражение товара
+  $node = new stdClass();
+  $node->type = $node_type;
+  $category = new stdClass();
+
+  node_object_prepare($node);
+
+  // Получаем категорию каталога
+  $category->tid = $import_config->main_catalogue_category;
+
+  // Получаем название товара
+  $product_title = $product->title;
+
+  // Заполняем поля
+  $node->title = $product_title;
+  $node->field_artikul['und'][0]['product_id'] = $product->product_id;
+  // $node->field_product_category['und'][0]['tid'] = $category->tid;
+  $node->field_catalog['und'][0]['tid'] = $category->tid;
+  $node->field_product_import_id['und'][0]['value'] = $import_id;
+  $node->language = LANGUAGE_NONE;
+
+  // Сохраняем отражение товара
+  node_save($node);
 }
 

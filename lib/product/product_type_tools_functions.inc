@@ -16,31 +16,9 @@ function fill_product_type_tools_fields_from_row($product, $row){
   $product->sku = $unique_id;
 
   // -- Бренд
-  $is_brand_on_site = is_brand_on_site($brand);
-
-  if($is_brand_on_site){
-    $brand_term = current(taxonomy_get_term_by_name($brand));
-    $product->field_product_brand['und'][0]['tid'] = $brand_term->tid;
-  } 
-
-  if(!$is_brand_on_site && !is_null($is_brand_on_site)){
-    $new_brand_term = add_brand_on_site($brand);
-    $product->field_product_brand['und'][0]['tid'] = $new_brand_term->tid;
-  }
-
+  fill_product_brand_field($product, $brand);
   // -- Группа
-  $is_tools_group_on_site = is_tools_group_on_site($group);
-
-  if($is_tools_group_on_site){
-    $group_term = current(taxonomy_get_term_by_name($group));
-    $product->field_tools_group['und'][0]['tid'] = $group_term->tid;
-  } 
-  
-  if(!$is_tools_group_on_site && !is_null($is_tools_group_on_site)){
-    $new_group_term = add_tools_group_on_site($group);
-    $product->field_tools_group['und'][0]['tid'] = $new_group_term->tid;
-  }
-
+  fill_product_type_tools_group_field($product, $group);
   // -- Серия
   $product->field_tools_serial['und'][0]['value'] = $series;
   // -- Описание
@@ -56,6 +34,20 @@ function fill_product_type_tools_fields_from_row($product, $row){
 }
 
 // Группы
+function fill_product_type_tools_group_field(&$product, $group){
+  $is_tools_group_on_site = is_tools_group_on_site($group);
+
+  if($is_tools_group_on_site){
+    $group_term = current(taxonomy_get_term_by_name($group));
+    $product->field_tools_group['und'][0]['tid'] = $group_term->tid;
+  } 
+  
+  if(!$is_tools_group_on_site && !is_null($is_tools_group_on_site)){
+    $new_group_term = add_tools_group_on_site($group);
+    $product->field_tools_group['und'][0]['tid'] = $new_group_term->tid;
+  }
+}
+
 function is_tools_group_on_site($group_name){
   return is_taxonomy_term_in_vocabulary($group_name, 'tools_groups');
 }

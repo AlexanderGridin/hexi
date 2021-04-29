@@ -19,30 +19,10 @@ function fill_product_type_paints_fields_from_row($product, $row){
   $product->sku = $unique_id;
 
   // -- Бренд
-  $is_brand_on_site = is_brand_on_site($brand);
-
-  if($is_brand_on_site){
-    $brand_term = current(taxonomy_get_term_by_name($brand));
-    $product->field_product_brand['und'][0]['tid'] = $brand_term->tid;
-  } 
-
-  if(!$is_brand_on_site && !is_null($is_brand_on_site)){
-    $new_brand_term = add_brand_on_site($brand);
-    $product->field_product_brand['und'][0]['tid'] = $new_brand_term->tid;
-  }
+  fill_product_brand_field($product, $brand);
 
   // -- Подраздел
-  $is_subcategory_on_site = is_paint_subcategory_on_site($subcategory);
-
-  if($is_subcategory_on_site){
-    $subcategory_term = current(taxonomy_get_term_by_name($subcategory));
-    $product->field_product_subcategory['und'][0]['tid'] = $subcategory_term->tid;
-  } 
-  
-  if(!$is_subcategory_on_site && !is_null($is_subcategory_on_site)){
-    $new_subcategory_term = add_paint_subcategory_on_site($subcategory);
-    $product->field_product_subcategory['und'][0]['tid'] = $new_subcategory_term->tid;
-  }
+  fill_product_type_paint_subcategory_field($product, $subcategory);
 
   // -- Назначение краски
   $product->field_product_appoint['und'] = get_appoint_field_values_from_string($product_appoint);
@@ -82,6 +62,20 @@ function fill_product_type_paints_fields_from_row($product, $row){
 }
 
 // Подразделы
+function fill_product_type_paint_subcategory_field(&$product, $subcategory){
+  $is_subcategory_on_site = is_paint_subcategory_on_site($subcategory);
+
+  if($is_subcategory_on_site){
+    $subcategory_term = current(taxonomy_get_term_by_name($subcategory));
+    $product->field_product_subcategory['und'][0]['tid'] = $subcategory_term->tid;
+  } 
+  
+  if(!$is_subcategory_on_site && !is_null($is_subcategory_on_site)){
+    $new_subcategory_term = add_paint_subcategory_on_site($subcategory);
+    $product->field_product_subcategory['und'][0]['tid'] = $new_subcategory_term->tid;
+  }
+}
+
 function is_paint_subcategory_on_site($subcategory_name){
   return is_taxonomy_term_in_vocabulary($subcategory_name, 'paints_subcategories');
 }

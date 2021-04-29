@@ -8,7 +8,7 @@
 
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
 
-dpm($active_config);
+// dpm($active_config);
 
 echo $config_html;
 echo drupal_render($config_confirmation_form);
