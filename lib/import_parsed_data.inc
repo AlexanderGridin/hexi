@@ -160,8 +160,7 @@ function handle_display_for_groupped_product($product, $import_config){
     $node->title = $product_title;
     $node->field_artikul['und'][0] = $product_reference;
     $node->field_products_group_sku['und'][0]['value'] = $product->field_product_group_sku['und'][0]['value'];
-    // $node->field_product_category['und'][0]['tid'] = $category->tid;
-    $node->field_catalog['und'][0]['tid'] = $category->tid;
+    $node->field_product_category['und'][0]['tid'] = $category->tid;
     $node->field_product_import_id['und'][0]['value'] = $import_id;
     $node->language = LANGUAGE_NONE;
 
@@ -226,8 +225,7 @@ function create_display_for_single_product($product, $import_config){
   // Заполняем поля
   $node->title = $product_title;
   $node->field_artikul['und'][0]['product_id'] = $product->product_id;
-  // $node->field_product_category['und'][0]['tid'] = $category->tid;
-  $node->field_catalog['und'][0]['tid'] = $category->tid;
+  $node->field_product_category['und'][0]['tid'] = $category->tid;
   $node->field_product_import_id['und'][0]['value'] = $import_id;
   $node->language = LANGUAGE_NONE;
 
