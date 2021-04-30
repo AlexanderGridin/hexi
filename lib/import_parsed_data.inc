@@ -5,6 +5,7 @@ module_load_include('inc', 'hexi', '/lib/product/product_type_tools_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_paints_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_stucco_functions');
 module_load_include('inc', 'hexi', '/lib/product/product_type_carpet_functions');
+module_load_include('inc', 'hexi', '/lib/product/product_type_wallpapers_functions');
 
 // Инициализация импорта
 function import_parsed_data(){
@@ -79,6 +80,10 @@ function create_product($import_config, $row){
     $product = fill_product_type_carpet_fields_from_row($product, $row);
   }
 
+  if($import_config->product_type == 'product_wallpapers'){
+    $product = fill_product_type_wallpapers_fields_from_row($product, $row);
+  }
+
   // Заполняем общие поля
   $product->type = $import_config->product_type;
   $product->field_product_import_id['und'][0]['value'] = $import_id;
@@ -108,6 +113,10 @@ function create_product_display($import_config, $row){
 
     case 'product_carpet':
       $product = commerce_product_load_by_sku($row['cells_data'][6]);
+      break;
+
+    case 'product_wallpapers':
+      $product = commerce_product_load_by_sku($row['cells_data'][2]);
       break;
   }
 

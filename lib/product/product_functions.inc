@@ -1,4 +1,42 @@
 <?php 
+// Дизайн
+function get_design_field_values_from_string($str){
+  if(!empty($str)){
+    $design_names = explode('/', $str);
+    $values = array();
+
+    foreach($design_names as $design){
+      $is_design_on_site = is_design_on_site($design);
+
+      if($is_design_on_site){
+        $design_term = current(taxonomy_get_term_by_name($design));
+        array_push($values, array(
+          'tid' => $design_term->tid,
+        ));
+      }
+
+      if(!$is_design_on_site && !is_null($is_design_on_site)){
+        $new_design = add_design_on_site($design);
+        array_push($values, array(
+          'tid' => $new_design->tid,
+        ));
+      }
+    }
+
+    return $values;
+  }
+}
+
+function is_design_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_design');
+}
+
+function add_design_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Дизайны');
+
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
+}
+
 // Cтили продукции
 function fill_product_style_field(&$product, $style){
   $is_product_style_on_site = is_product_style_on_site($style);
@@ -70,14 +108,14 @@ function fill_product_brand_field(&$product, $brand){
   return $product;
 }
 
-function is_brand_on_site($brand_name){
-  return is_taxonomy_term_in_vocabulary($brand_name, 'product_brands');
+function is_brand_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_brands');
 }
 
-function add_brand_on_site($brand_name){
-  $brands_vocabulary = taxonomy_get_vocabulary_by_name('Бренды');
+function add_brand_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Бренды');
 
-  return taxonomy_create_term_in_vocabulary($brand_name, $brands_vocabulary->vid);
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
 
 // Видимые цвета
@@ -108,14 +146,14 @@ function get_visible_colors_field_values_from_string($str){
   }
 }
 
-function is_visible_color_on_site($color_name){
-  return is_taxonomy_term_in_vocabulary($color_name, 'product_visible_colors');
+function is_visible_color_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_visible_colors');
 }
 
-function add_visible_color_on_site($color_name){
+function add_visible_color_on_site($name){
   $vocabulary = taxonomy_get_vocabulary_by_name('Видимые цвета');
 
-  return taxonomy_create_term_in_vocabulary($color_name, $vocabulary->vid);
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
 
 // Назначения продукции
@@ -146,14 +184,14 @@ function get_appoint_field_values_from_string($str){
   }
 }
 
-function is_appoint_on_site($appoint){
-  return is_taxonomy_term_in_vocabulary($appoint, 'product_appointments');
+function is_appoint_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_appointments');
 }
 
-function add_appoint_on_site($appoint){
-  $appoints_voc = taxonomy_get_vocabulary_by_name('Назначения продукции');
+function add_appoint_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Назначения продукции');
 
-  return taxonomy_create_term_in_vocabulary($appoint, $appoints_voc->vid);
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
 
 // Назначения продукции в интерьере
@@ -184,12 +222,12 @@ function get_appoint_interrior_field_values_from_string($str){
   }
 }
 
-function is_appoint_interrior_on_site($appoint){
-  return is_taxonomy_term_in_vocabulary($appoint, 'product_appointments_interior');
+function is_appoint_interrior_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_appointments_interior');
 }
 
-function add_appoint_interrior_on_site($appoint){
-  $appoints_voc = taxonomy_get_vocabulary_by_name('Назначения продукции в интерьере');
+function add_appoint_interrior_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Назначения продукции в интерьере');
 
-  return taxonomy_create_term_in_vocabulary($appoint, $appoints_voc->vid);
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }

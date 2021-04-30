@@ -16,6 +16,7 @@ function hexi_enable(){
   taxonomy_create_vocabulary('Коллекции производителей', 'manufacturer_collections');
   taxonomy_create_vocabulary('Стили продукции', 'product_styles');
   taxonomy_create_vocabulary('Видимые цвета', 'product_visible_colors');
+  taxonomy_create_vocabulary('Дизайны', 'product_design');
 
   // Словари по отдельным группам товаров
   // -- Инструменты
@@ -26,6 +27,9 @@ function hexi_enable(){
 
   // -- Ковры
   taxonomy_create_vocabulary('Размеры ковров', 'carpets_sizes');
+
+  // -- Обои
+  taxonomy_create_vocabulary('Типы обоев', 'wallpapers_types');
 
   /* -------------------------------- */
   /* Создаем необходимые папки
