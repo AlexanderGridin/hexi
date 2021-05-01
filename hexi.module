@@ -46,7 +46,7 @@ function hexi_menu(){
     'title' => 'Очистить категорию каталога',
     'description' => 'Страница очистки категории каталога',
     'page callback' => 'clear_catalogue_category',
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/clear_catalogue_category.inc'
   );
@@ -73,9 +73,18 @@ function hexi_menu(){
     'title' => 'Проверка артикулов товаров на дублирование в БД',
     'description' => 'Страница проверки артикулов товаров на дублирование в БД',
     'page callback' => 'check_products_sku_for_duplicates',
-    'type' => MENU_LOCAL_TASK,
+    'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/check_products_sku_for_duplicates.inc'
+  );
+
+  $items['admin/hexi-config/check-products-sku-for-duplicates-in-file'] = array(
+    'title' => 'Проверка артикулов товаров на дублирование в файле',
+    'description' => 'Страница проверки артикулов товаров на дублирование в файле',
+    'page callback' => 'check_products_sku_for_duplicates_in_file',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/check_products_sku_for_duplicates_in_file.inc'
   );
 
   // DEV
@@ -327,6 +336,13 @@ function hexi_theme(){
       'template' => 'templates/check_products_sku_for_duplicates',
       'variables' => array(
         'check_products_sku_for_duplicates_form' => NULL
+      )
+    ),
+
+    'check_products_sku_for_duplicates_in_file' => array(
+      'template' => 'templates/check_products_sku_for_duplicates_in_file',
+      'variables' => array(
+        'check_products_sku_for_duplicates_in_file_form' => NULL
       )
     ),
 
