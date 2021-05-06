@@ -5,6 +5,7 @@ function print_photo_folders_table($photo_folders){
 
   foreach($photo_folders as $folder){
     $folder_node = node_load($folder->nid);
+    $folder_node_title = "<a href=\"/view-photos-in-photo-folder?nid=$folder->nid\">$folder_node->title</a>";
     $total_photos_in_folder = get_total_photos_in_folder($folder_node->nid);
     $row_class = '';
 
@@ -16,12 +17,25 @@ function print_photo_folders_table($photo_folders){
 
     $counter++;
 
+    $actions_list = "<li><a href=\"/\">Удалить папку</a></li>";
+
+    if($total_photos_in_folder > 0){
+      $actions_list = "
+        <li><a href=\"/view-photos-in-photo-folder?nid=$folder->nid\">Посмотреть фотографии</a></li>
+        <li><a href=\"/\">Очистить папку</a></li>
+      " . $actions_list;
+    }
+
     $table_rows .= "
       <tr class=\"$row_class\">
-        <td>$folder_node->title</td>
+        <td>$folder_node_title</td>
         <td>$folder_node->nid</td>
         <td>$total_photos_in_folder</td>
-        <td>Действия</td>
+        <td>
+          <ul>
+            $actions_list
+          </ul>
+        </td>
       </tr>
     ";
   }
@@ -32,7 +46,7 @@ function print_photo_folders_table($photo_folders){
         <tr>
           <th>Название папки</th>
           <th>NID папки</th>
-          <th>Количество фотографий в папке</th>
+          <th>Фотографий в папке</th>
           <th>Действия</th>
         </tr>
       </thead>

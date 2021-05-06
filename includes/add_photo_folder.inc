@@ -3,6 +3,8 @@ module_load_include('inc', 'hexi', '/lib/hexi_tools');
 module_load_include('inc', 'hexi', '/lib/photo_folders_functions');
 
 function add_photo_folder(){
+  variable_del('hexi_photo_folder_nid');
+
   function add_photo_folder_form($form, &$form_state){
     /*
     $form['file'] = array(

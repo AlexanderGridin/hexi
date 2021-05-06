@@ -4,3 +4,5 @@ package = oren-vesta
 core = 7.x
 
 files[] = hexi.module
+
+stylesheets[all][] = css/hexi.css

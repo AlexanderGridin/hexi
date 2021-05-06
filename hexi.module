@@ -105,6 +105,15 @@ function hexi_menu(){
     'file' => 'includes/add_photos_in_photo_folder.inc'
   );
 
+  $items['view-photos-in-photo-folder'] = array(
+    'title' => 'Посмотреть фотографии в папке',
+    'description' => 'Страница просмотра фотографий в папке',
+    'page callback' => 'view_photos_in_photo_folder',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/view_photos_in_photo_folder.inc'
+  );
+
   // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
@@ -376,6 +385,14 @@ function hexi_theme(){
       'template' => 'templates/add_photos_in_photo_folder',
       'variables' => array(
         'add_photos_in_photo_folder_form' => NULL,
+      )
+    ),
+
+    'view_photos_in_photo_folder' => array(
+      'template' => 'templates/view_photos_in_photo_folder',
+      'variables' => array(
+        'folder_node' => NULL,
+        'folder_photos' => NULL
       )
     ),
 
