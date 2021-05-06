@@ -2,7 +2,7 @@
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
 module_load_include('inc', 'hexi', '/lib/photo_folders_functions');
 
-function add_photo_folder(){
+function photo_folders(){
   variable_del('hexi_photo_folder_nid');
 
   function add_photo_folder_form($form, &$form_state){
@@ -65,7 +65,7 @@ function add_photo_folder(){
 
   $available_photo_folders = get_photo_folders_per_page(20);
   $add_photo_folder_form = drupal_get_form('add_photo_folder_form');
-  return theme('add_photo_folder', array(
+  return theme('photo_folders', array(
     'add_photo_folder_form' => $add_photo_folder_form,
     'available_photo_folders' => $available_photo_folders
   ));

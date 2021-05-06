@@ -60,16 +60,26 @@ function hexi_menu(){
     'file' => 'includes/clear_taxonomy_vocabulary.inc'
   );
 
-  $items['admin/hexi-config/remove-products-by-import-id'] = array(
+  $items['admin/hexi-config/tools'] = array(
+    'title' => 'Инструменты',
+    'description' => 'Страница с дополнительным инструментами',
+    'page callback' => 'tools',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/tools.inc'
+  );
+
+  $items['admin/hexi-config/tools/remove-products-by-import-id'] = array(
     'title' => 'Удалить товары по идентификатору импорта',
     'description' => 'Страница удаления товаров по идентификатору импорта',
     'page callback' => 'remove_products_by_import_id',
-    'type' => MENU_LOCAL_TASK,
+    // 'type' => MENU_LOCAL_TASK,
+    'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/remove_products_by_import_id.inc'
   );
 
-  $items['admin/hexi-config/check-products-sku-for-duplicates'] = array(
+  $items['admin/hexi-config/tools/check-products-sku-for-duplicates'] = array(
     'title' => 'Проверка артикулов товаров на дублирование в БД',
     'description' => 'Страница проверки артикулов товаров на дублирование в БД',
     'page callback' => 'check_products_sku_for_duplicates',
@@ -78,7 +88,7 @@ function hexi_menu(){
     'file' => 'includes/check_products_sku_for_duplicates.inc'
   );
 
-  $items['admin/hexi-config/check-products-sku-for-duplicates-in-file'] = array(
+  $items['admin/hexi-config/tools/check-products-sku-for-duplicates-in-file'] = array(
     'title' => 'Проверка артикулов товаров на дублирование в файле',
     'description' => 'Страница проверки артикулов товаров на дублирование в файле',
     'page callback' => 'check_products_sku_for_duplicates_in_file',
@@ -87,16 +97,16 @@ function hexi_menu(){
     'file' => 'includes/check_products_sku_for_duplicates_in_file.inc'
   );
 
-  $items['admin/hexi-config/add-photo-folder'] = array(
-    'title' => 'Добавить папку для хранения фотографий',
-    'description' => 'Страница добавления папки для хранения фотографий',
-    'page callback' => 'add_photo_folder',
+  $items['admin/hexi-config/photo-folders'] = array(
+    'title' => 'Папки с фотографиями',
+    'description' => 'Страница просмотра папок с фотографиями',
+    'page callback' => 'photo_folders',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/add_photo_folder.inc'
+    'file' => 'includes/photo_folders.inc'
   );
 
-  $items['admin/hexi-config/add-photos-in-photo-folder'] = array(
+  $items['admin/hexi-config/photo-folders/add-photos-in-photo-folder'] = array(
     'title' => 'Добавить фотографии в папку',
     'description' => 'Страница добавления фотографий в папку',
     'page callback' => 'add_photos_in_photo_folder',
@@ -352,6 +362,10 @@ function hexi_theme(){
       )
     ),
 
+    'tools' => array(
+      'template' => 'templates/tools',
+    ),
+
     'remove_products_by_import_id' => array(
       'template' => 'templates/remove_products_by_import_id',
       'variables' => array(
@@ -373,8 +387,8 @@ function hexi_theme(){
       )
     ),
 
-    'add_photo_folder' => array(
-      'template' => 'templates/add_photo_folder',
+    'photo_folders' => array(
+      'template' => 'templates/photo_folders',
       'variables' => array(
         'add_photo_folder_form' => NULL,
         'available_photo_folders' => NULL
