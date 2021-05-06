@@ -87,6 +87,15 @@ function hexi_menu(){
     'file' => 'includes/check_products_sku_for_duplicates_in_file.inc'
   );
 
+  $items['admin/hexi-config/add-photo-folder'] = array(
+    'title' => 'Добавить папку для хранения фотографий',
+    'description' => 'Страница добавления папки для хранения фотографий',
+    'page callback' => 'add_photo_folder',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/add_photo_folder.inc'
+  );
+
   // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
@@ -286,7 +295,7 @@ function hexi_menu(){
  * Implements hook_theme().
  */
 function hexi_theme(){
-  return array(
+  $theme = array(
     'hexi_config' => array(
       'template' => 'templates/hexi_config',
       'variables' => array(
@@ -346,6 +355,14 @@ function hexi_theme(){
       )
     ),
 
+    'add_photo_folder' => array(
+      'template' => 'templates/add_photo_folder',
+      'variables' => array(
+        'add_photo_folder_form' => NULL,
+        'available_photo_folders' => NULL
+      )
+    ),
+
     'test_page' => array(
       'template' => 'templates/test_page'
     ),
@@ -392,6 +409,8 @@ function hexi_theme(){
     ),
     */
   );
+
+  return $theme;
 }
 
 /**
