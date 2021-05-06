@@ -41,25 +41,7 @@ function hexi_menu(){
     'file' => 'includes/data_processing_finished.inc'
   );
 
-  // TECH
-  $items['admin/hexi-config/clear-catalogue-item'] = array(
-    'title' => 'Очистить категорию каталога',
-    'description' => 'Страница очистки категории каталога',
-    'page callback' => 'clear_catalogue_category',
-    'type' => MENU_LOCAL_ACTION,
-    'access callback' => 'user_is_administrator',
-    'file' => 'includes/clear_catalogue_category.inc'
-  );
-
-  $items['admin/hexi-config/clear-taxonomy-vocabulary'] = array(
-    'title' => 'Очистить словарь таксономии',
-    'description' => 'Страница очистки словаря таксономии',
-    'page callback' => 'clear_taxonomy_vocabulary',
-    'type' => MENU_LOCAL_TASK,
-    'access callback' => 'user_is_administrator',
-    'file' => 'includes/clear_taxonomy_vocabulary.inc'
-  );
-
+  // TOOLS
   $items['admin/hexi-config/tools'] = array(
     'title' => 'Инструменты',
     'description' => 'Страница с дополнительным инструментами',
@@ -67,6 +49,26 @@ function hexi_menu(){
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/tools.inc'
+  );
+
+  $items['admin/hexi-config/tools/clear-catalogue-item'] = array(
+    'title' => 'Очистить категорию каталога',
+    'description' => 'Страница очистки категории каталога',
+    'page callback' => 'clear_catalogue_category',
+    // 'type' => MENU_LOCAL_ACTION,
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/clear_catalogue_category.inc'
+  );
+
+  $items['admin/hexi-config/tools/clear-taxonomy-vocabulary'] = array(
+    'title' => 'Очистить словарь таксономии',
+    'description' => 'Страница очистки словаря таксономии',
+    'page callback' => 'clear_taxonomy_vocabulary',
+    // 'type' => MENU_LOCAL_TASK,
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/clear_taxonomy_vocabulary.inc'
   );
 
   $items['admin/hexi-config/tools/remove-products-by-import-id'] = array(
@@ -97,6 +99,7 @@ function hexi_menu(){
     'file' => 'includes/check_products_sku_for_duplicates_in_file.inc'
   );
 
+  // PHOTO FOLDERS
   $items['admin/hexi-config/photo-folders'] = array(
     'title' => 'Папки с фотографиями',
     'description' => 'Страница просмотра папок с фотографиями',
@@ -122,6 +125,15 @@ function hexi_menu(){
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
     'file' => 'includes/view_photos_in_photo_folder.inc'
+  );
+
+  $items['confirm-photo-folder-delete'] = array(
+    'title' => 'Подтверждение удаления папки с фотографиями',
+    'description' => 'Страница подтверждения удаления папки с фотографиями',
+    'page callback' => 'confirm_photo_folder_delete',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/confirm_photo_folder_delete.inc'
   );
 
   // DEV
@@ -407,6 +419,14 @@ function hexi_theme(){
       'variables' => array(
         'folder_node' => NULL,
         'folder_photos' => NULL
+      )
+    ),
+
+    'confirm_photo_folder_delete' => array(
+      'template' => 'templates/confirm_photo_folder_delete',
+      'variables' => array(
+        'node_for_delete' => NULL,
+        'confirm_photo_folder_delete_form' => NULL
       )
     ),
 
