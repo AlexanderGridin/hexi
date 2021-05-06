@@ -5,7 +5,7 @@ function print_photo_folders_table($photo_folders){
 
   foreach($photo_folders as $folder){
     $folder_node = node_load($folder->nid);
-    $total_photos_in_folder = get_total_photos_in_folder($folder_node->title);
+    $total_photos_in_folder = get_total_photos_in_folder($folder_node->nid);
     $row_class = '';
 
     if($counter % 2 == 0){
@@ -45,12 +45,12 @@ function print_photo_folders_table($photo_folders){
   echo $table;
 }
 
-function get_total_photos_in_folder($folder_name){
+function get_total_photos_in_folder($folder_nid){
   // Формируем запрос
   $query = new EntityFieldQuery();
 
   $entities = $query->entityCondition('entity_type', 'file')
-    ->fieldCondition('field_hexi_folder', 'value', $folder_name, '=')
+    ->fieldCondition('field_photo_folder_id', 'value', $folder_nid, '=')
     ->execute();
 
   if(count($entities) == 0){
@@ -66,7 +66,22 @@ function get_all_photo_folders(){
 
   $entities = $query->entityCondition('entity_type', 'node')
     ->propertyCondition('type', 'photo_folder')
-    ->pager(20)
+    ->execute();
+
+  if(count($entities) == 0){
+    return NULL;
+  } else {
+    return $entities['node'];
+  }
+}
+
+function get_photo_folders_per_page($items_per_page){
+  // Формируем запрос
+  $query = new EntityFieldQuery();
+
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'photo_folder')
+    ->pager($items_per_page)
     ->execute();
 
   if(count($entities) == 0){
@@ -90,4 +105,16 @@ function get_photo_folder_by_name($folder_name){
   } else {
     return $entities['node'];
   }
+}
+
+function generate_photo_folders_form_options_array(){
+  $options = array();
+  $photo_folders = get_all_photo_folders();
+  
+  foreach($photo_folders as $folder){
+    $folder = node_load($folder->nid);
+    $options[$folder->nid] =  $folder->title;
+  }
+
+  return $options;
 }

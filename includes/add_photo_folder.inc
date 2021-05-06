@@ -61,7 +61,7 @@ function add_photo_folder(){
     }
   }
 
-  $available_photo_folders = get_all_photo_folders();
+  $available_photo_folders = get_photo_folders_per_page(20);
   $add_photo_folder_form = drupal_get_form('add_photo_folder_form');
   return theme('add_photo_folder', array(
     'add_photo_folder_form' => $add_photo_folder_form,

@@ -96,6 +96,15 @@ function hexi_menu(){
     'file' => 'includes/add_photo_folder.inc'
   );
 
+  $items['admin/hexi-config/add-photos-in-photo-folder'] = array(
+    'title' => 'Добавить фотографии в папку',
+    'description' => 'Страница добавления фотографий в папку',
+    'page callback' => 'add_photos_in_photo_folder',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/add_photos_in_photo_folder.inc'
+  );
+
   // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
@@ -360,6 +369,13 @@ function hexi_theme(){
       'variables' => array(
         'add_photo_folder_form' => NULL,
         'available_photo_folders' => NULL
+      )
+    ),
+
+    'add_photos_in_photo_folder' => array(
+      'template' => 'templates/add_photos_in_photo_folder',
+      'variables' => array(
+        'add_photos_in_photo_folder_form' => NULL,
       )
     ),
 
