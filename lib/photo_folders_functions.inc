@@ -22,7 +22,7 @@ function print_photo_folders_table($photo_folders){
     if($total_photos_in_folder > 0){
       $actions_list = "
         <li><a href=\"/view-photos-in-photo-folder?nid=$folder->nid\">Посмотреть фотографии</a></li>
-        <li><a href=\"/\">Очистить папку</a></li>
+        <li><a href=\"/confirm-photo-folder-clearing?nid=$folder->nid\">Очистить папку</a></li>
       " . $actions_list;
     }
 

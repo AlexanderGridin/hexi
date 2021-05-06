@@ -136,6 +136,15 @@ function hexi_menu(){
     'file' => 'includes/confirm_photo_folder_delete.inc'
   );
 
+  $items['confirm-photo-folder-clearing'] = array(
+    'title' => 'Подтверждение удаления папки с фотографиями',
+    'description' => 'Страница подтверждения удаления папки с фотографиями',
+    'page callback' => 'confirm_photo_folder_clearing',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/confirm_photo_folder_clearing.inc'
+  );
+
   // DEV
   $items['test-page'] = array(
     'title' => 'Тестовая страница',
@@ -427,6 +436,14 @@ function hexi_theme(){
       'variables' => array(
         'node_for_delete' => NULL,
         'confirm_photo_folder_delete_form' => NULL
+      )
+    ),
+
+    'confirm_photo_folder_clearing' => array(
+      'template' => 'templates/confirm_photo_folder_clearing',
+      'variables' => array(
+        'node_for_clearing' => NULL,
+        'confirm_photo_folder_clearing_form' => NULL
       )
     ),
 
