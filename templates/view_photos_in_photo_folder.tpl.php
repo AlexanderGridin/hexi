@@ -40,5 +40,8 @@ function print_folder_photos($photos){
     <div class=\"photos-list\">
       $photos_html
     </div>
+    <div class=\"page-actions\">
+      <a href=\"admin/hexi-config/photo-folders\" class=\"bd-button\">Вернуться к списку папок</a>
+    </div>
   ";
 }

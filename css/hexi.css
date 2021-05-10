@@ -29,3 +29,13 @@
   margin: 7px 0;
   font-weight: bold;
 }
+
+.page-actions
+{
+  text-align: center;
+}
+
+input.error
+{
+  border: 2px solid red !important;
+}

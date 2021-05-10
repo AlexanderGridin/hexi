@@ -11,6 +11,7 @@ function fill_product_type_stucco_fields_from_row($product, $row){
   $product_appoint = $row['cells_data'][20];
   $product_appoint_interrior = $row['cells_data'][21];
   $price = intval(preg_replace('/\D/', '', $row['cells_data'][22])) * 100;
+  $imgs_names = $row['cells_data'][7];
 
   // Устанавливаем соответствие полей
   // -- Название
@@ -33,6 +34,9 @@ function fill_product_type_stucco_fields_from_row($product, $row){
   $product->commerce_price['und'][0]['amount'] = $price;
   // -- Покрытие
   $product->field_product_coating['und'][0]['value'] = $coating;
+  // Фотографии
+  $product_images_array = get_imgs_from_string_of_names($imgs_names);
+  $product->field_product_photo['und'] = $product_images_array;
 
   return $product;
 }

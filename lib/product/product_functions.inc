@@ -1,4 +1,45 @@
 <?php 
+function get_imgs_from_string_of_names($str){
+  $files = array();
+  $names = explode(' ', $str);
+  dpm($names);
+
+  if(count($names) > 0){
+    foreach($names as $name){
+      array_push($files, (array)get_img_by_orig_name($name));
+    }
+
+    return $files;
+  } else {
+    return NULL;
+  }
+}
+
+function get_img_by_orig_name($name){
+  // Формируем запрос
+  $query = new EntityFieldQuery();
+
+  $entities = $query->entityCondition('entity_type', 'file')
+    ->fieldCondition('field_img_source_name', 'value', $name, 'CONTAINS')
+    ->execute();
+
+  if(count($entities) == 0){
+    return NULL;
+  } 
+  
+  if(count($entities) == 1){
+    $file = NULL;
+
+    foreach($entities['file'] as $preloaded_file){
+      $file = file_load($preloaded_file->fid);
+    }
+    
+    if(isset($file)){
+      return $file;
+    }
+  }
+}
+
 // Дизайн
 function get_design_field_values_from_string($str){
   if(!empty($str)){

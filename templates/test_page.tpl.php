@@ -44,28 +44,5 @@ if(count($node->field_artikul) == 1){
 dpm($node);
 */
 
-function get_stat( $url, $headers )
-{
-    $handle = curl_init();
-    curl_setopt( $handle, CURLOPT_URL, $url );
-    curl_setopt( $handle, CURLOPT_HTTPHEADER, $headers );
-    curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, false );
-    curl_setopt( $handle, CURLOPT_SSL_VERIFYHOST, false );
-    curl_setopt( $handle, CURLOPT_RETURNTRANSFER, true );
-    $response = curl_exec( $handle );
-    $code = curl_getinfo( $handle, CURLINFO_HTTP_CODE );
-    return array( "code" => $code, "response" => $response );
-}
-
-$url_yandex_disk = "https://yadi.sk/i/byMUqoSLiw3Ki";
-log_var(urlencode( $url_yandex_disk ));
-$result = get_stat( "https://cloud-api.yandex.net/v1/disk/public/resources?public_key=" . urlencode( $url_yandex_disk ), array() );
-if( $result["code"] == 200 )
-{
-  $result["response"] = json_decode( $result["response"], true );
-  echo '<a href="' . $result["response"]["href"] . '">Скачать</a>';
-}
-else
-{
-  echo "error";
-}
+// $str = 'DB06DS04_1 DB06DS04_2 DB06DS04_3 DB06DS04_4 DB06DS04_5';
+// dpm(get_imgs_from_string_of_names($str));

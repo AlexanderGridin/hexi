@@ -4,6 +4,7 @@
  * Изначально данное поле у сущности файла отсутствует, поэтому оно должно быть создано через админку у типа файла Document.
  */
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
+module_load_include('inc', 'hexi', '/lib/photo_folders_functions');
 
 function hexi_config(){
   delete_variable_from_db('hexi_import_config');
@@ -96,10 +97,9 @@ function hexi_config(){
       ),
     );
 
-    /*
     $form['is_importing_images'] = array(
       '#type'          => 'radios',
-      '#title'         => 'Прайс содержит изображения?',
+      '#title'         => 'Необходимо импортировать изображения?',
       '#options'       => array(
         '0' => 'Нет',
         '1' => 'Да'
@@ -115,13 +115,28 @@ function hexi_config(){
       ),
     );
 
+    $form['folder_with_images_nid'] = array(
+      '#type' => 'radios', 
+      '#title' => 'Выберите папку с изображениями', 
+      '#default_value' => NULL, 
+      '#description'   => "Папка с изображениями",
+      '#states' => array(
+        'visible' => array(
+          ':input[name="is_importing_images"]' => array(
+            'value' => '1',
+          ),
+        ),
+      ),
+      '#options'       => generate_photo_folders_form_options_array(),
+    );
+
     $form['image_column_index'] = array(
       '#type' => 'textfield', 
-      '#title' => 'Введите номер колонки с изображением', 
+      '#title' => 'Введите номер колонки, содержащей названия изображений', 
       '#default_value' => NULL, 
       '#size' => 60, 
       '#maxlength' => 128, 
-      '#description'   => "Целое число",
+      '#description'   => "Целое число. В колонке должны быть указаны названия изображений, разделенные одним пробелом. Тип изображения (расширение файла) не указывается.",
       '#states' => array(
         'visible' => array(
           ':input[name="is_importing_images"]' => array(
@@ -130,7 +145,6 @@ function hexi_config(){
         ),
       ),
     );
-    */
 
     $form['main_catalogue_category'] = array(
       '#type'          => 'radios',
@@ -304,6 +318,14 @@ function hexi_config(){
       form_set_error('file', 'Файл не был загружен');
     }
 
+    if(
+      (boolean)$form_state['values']['is_importing_images'] &&
+      !isset($form_state['values']['folder_with_images_nid'])
+    ){
+      form_set_error('folder_with_images_nid', 'Выберите папку с изображениями, в которой хранятся фотографии');
+    }
+
+    // Устанавливаем конфиги
     switch ($form_state['values']['operation_type']){
       case 'import_excel_data':
         variable_set('hexi_import_config', $import_config);
@@ -330,6 +352,8 @@ function hexi_config(){
         $import_config->main_catalogue_category = $form_state['values']['main_catalogue_category'];
         $import_config->is_import_catalogue = (boolean)$form_state['values']['is_import_catalogue'];
         $import_config->catalogue_category_cell_type = $form_state['values']['catalogue_category_cell_type'];
+        $import_config->folder_with_images_nid = $form_state['values']['folder_with_images_nid'];
+        $import_config->image_column_index = $form_state['values']['image_column_index'];
 
         variable_set('hexi_import_config', $import_config);
         break;

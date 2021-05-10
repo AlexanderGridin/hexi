@@ -51,6 +51,10 @@ function prepare_config_html($config){
     $image_column_index = $config->image_column_index;
     $is_importing_catalogue = get_boolean_readable_name($config->is_import_catalogue);
 
+    // Получаем папку с изображениями
+    $imgs_folder_node = node_load($config->folder_with_images_nid);
+    $imgs_folder_title = $imgs_folder_node->title;
+
     $import_str = "
       <h2>$title</h2>
       <div style=\"border: 1px solid #ddd; margin: 15px 0; box-shadow: 0 0 10px rgba(0,0,0,.3); padding: 15px;\">
@@ -59,6 +63,9 @@ function prepare_config_html($config){
         <p><strong>Начало обработки файла (номер строки файла Excel): </strong>$start_row</p>
         <p><strong>Конец обработки файла (номер строки файла Excel): </strong>$end_row</p>
         <p><strong>Категория продукции в каталоге: </strong>$main_catalogue_category</p>
+        <p><strong>Необходимо импортировать изображения?: </strong>$is_importing_images</p>
+        <p><strong>Папка с изображениями: </strong>$imgs_folder_title</p>
+        <p><strong>Колонка с названиями изображений: </strong>$image_column_index</p>
       </div>
       <p>
         <a href=\"/admin/hexi-config\" class=\"bd-button\" style=\"margin-top: 15px;\">Вернуться назад и изменить данные</a>

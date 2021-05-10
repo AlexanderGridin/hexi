@@ -17,7 +17,14 @@ function print_photo_folders_table($photo_folders){
 
     $counter++;
 
-    $actions_list = "<li><a href=\"/confirm-photo-folder-delete?nid=$folder_node->nid\">Удалить папку</a></li>";
+    $actions_list = "
+      <li>
+        <a href=\"/confirm-photo-folder-delete?nid=$folder_node->nid\">Удалить папку</a>
+      </li>
+      <li>
+        <a href=\"/admin/hexi-config/photo-folders/add-photos-in-photo-folder\">Добавить фотографии в папку</a>
+      </li>
+    ";
 
     if($total_photos_in_folder > 0){
       $actions_list = "
