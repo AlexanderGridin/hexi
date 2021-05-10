@@ -46,3 +46,7 @@ dpm($node);
 
 // $str = 'DB06DS04_1 DB06DS04_2 DB06DS04_3 DB06DS04_4 DB06DS04_5';
 // dpm(get_imgs_from_string_of_names($str));
+
+// $str = 'https://www.youtube.com/watch?v=teRQbQS3uaM&feature=youtu.be https://www.youtube.com/watch?v=0PbWHpu76GU&feature=youtu.be';
+// $str = 'https://www.youtube.com/watch?v=OPy4jIVmmcI https://www.youtube.com/watch?v=wkglhaL5jp8';
+// get_videos_array_from_string_of_url($str);

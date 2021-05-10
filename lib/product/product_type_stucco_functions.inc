@@ -15,6 +15,7 @@ function fill_product_type_stucco_fields_from_row($product, $row, $import_config
   $photos_folder_nid = $import_config->folder_with_images_nid;
   $interrior_examples_names = $row['cells_data'][8];
   $interrior_examples_folder_nid = $import_config->folder_with_interrior_examples_images_nid;
+  $videos_url_str = $row['cells_data'][9];
 
   // Устанавливаем соответствие полей
   // -- Название
@@ -39,13 +40,24 @@ function fill_product_type_stucco_fields_from_row($product, $row, $import_config
   $product->field_product_coating['und'][0]['value'] = $coating;
   // Фотографии
   if($import_config->is_importing_images){
-    $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
-    $product->field_product_photo['und'] = $product_images_array;
+    if(!empty($photos_names)){
+      $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
+      $product->field_product_photo['und'] = $product_images_array;
+    }
   }
   // Примеры интерьеров
   if($import_config->is_importing_interrior_examples){
-    $interrior_examples_images_array = get_imgs_from_string_of_names($interrior_examples_names, $interrior_examples_folder_nid);
-    $product->field_interriors_examples['und'] = $interrior_examples_images_array;
+    if(!empty($interrior_examples_names)){
+      $interrior_examples_images_array = get_imgs_from_string_of_names($interrior_examples_names, $interrior_examples_folder_nid);
+      $product->field_interriors_examples['und'] = $interrior_examples_images_array;
+    }
+  }
+  // Видеообзор
+  if($import_config->is_importing_video){
+    if(!empty($videos_url_str)){
+      $videos_array = get_videos_array_from_string_of_url($videos_url_str);
+      $product->field_video_review['und'] = $videos_array;
+    }
   }
 
   return $product;

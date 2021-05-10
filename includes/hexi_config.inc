@@ -163,6 +163,24 @@ function hexi_config(){
       '#options'       => generate_photo_folders_form_options_array(),
     );
 
+    $form['is_importing_video'] = array(
+      '#type'          => 'radios',
+      '#title'         => 'Необходимо импортировать видеообзоры?',
+      '#options'       => array(
+        '0' => 'Нет',
+        '1' => 'Да'
+      ),
+      '#default_value' => '0',
+      '#required'      => false,
+      '#states' => array(
+        'visible' => array(
+          ':input[name="product_type"]' => array(
+            'value' => 'stucco',
+          ),
+        ),
+      ),
+    );
+
     /*
     $form['image_column_index'] = array(
       '#type' => 'textfield', 
@@ -400,6 +418,7 @@ function hexi_config(){
         // $import_config->image_column_index = $form_state['values']['image_column_index'];
         $import_config->is_importing_interrior_examples = (boolean)$form_state['values']['is_importing_interrior_examples'];
         $import_config->folder_with_interrior_examples_images_nid = $form_state['values']['folder_with_interrior_examples_images_nid'];
+        $import_config->is_importing_video = (boolean)$form_state['values']['is_importing_video'];
 
         variable_set('hexi_import_config', $import_config);
         break;
