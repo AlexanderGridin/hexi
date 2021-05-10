@@ -1,5 +1,5 @@
 <?php 
-function fill_product_type_stucco_fields_from_row($product, $row){
+function fill_product_type_stucco_fields_from_row($product, $row, $import_config){
   // Идентифицируем поля
   $brand = $row['cells_data'][0];
   $coating = $row['cells_data'][1];
@@ -8,10 +8,13 @@ function fill_product_type_stucco_fields_from_row($product, $row){
   $unique_id = $row['cells_data'][4];
   $description = $row['cells_data'][5];
   $country = $row['cells_data'][6];
-  $product_appoint = $row['cells_data'][20];
-  $product_appoint_interrior = $row['cells_data'][21];
-  $price = intval(preg_replace('/\D/', '', $row['cells_data'][22])) * 100;
-  $imgs_names = $row['cells_data'][7];
+  $product_appoint = $row['cells_data'][10];
+  $product_appoint_interrior = $row['cells_data'][11];
+  $price = intval(preg_replace('/\D/', '', $row['cells_data'][12])) * 100;
+  $photos_names = $row['cells_data'][7];
+  $photos_folder_nid = $import_config->folder_with_images_nid;
+  $interrior_examples_names = $row['cells_data'][8];
+  $interrior_examples_folder_nid = $import_config->folder_with_interrior_examples_images_nid;
 
   // Устанавливаем соответствие полей
   // -- Название
@@ -35,8 +38,15 @@ function fill_product_type_stucco_fields_from_row($product, $row){
   // -- Покрытие
   $product->field_product_coating['und'][0]['value'] = $coating;
   // Фотографии
-  $product_images_array = get_imgs_from_string_of_names($imgs_names);
-  $product->field_product_photo['und'] = $product_images_array;
+  if($import_config->is_importing_images){
+    $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
+    $product->field_product_photo['und'] = $product_images_array;
+  }
+  // Примеры интерьеров
+  if($import_config->is_importing_interrior_examples){
+    $interrior_examples_images_array = get_imgs_from_string_of_names($interrior_examples_names, $interrior_examples_folder_nid);
+    $product->field_interriors_examples['und'] = $interrior_examples_images_array;
+  }
 
   return $product;
 }

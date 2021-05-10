@@ -1,12 +1,12 @@
 <?php 
-function get_imgs_from_string_of_names($str){
+function get_imgs_from_string_of_names($str, $photos_folder_nid){
   $files = array();
   $names = explode(' ', $str);
   dpm($names);
 
   if(count($names) > 0){
     foreach($names as $name){
-      array_push($files, (array)get_img_by_orig_name($name));
+      array_push($files, (array)get_img_by_orig_name($name, $photos_folder_nid));
     }
 
     return $files;
@@ -15,12 +15,13 @@ function get_imgs_from_string_of_names($str){
   }
 }
 
-function get_img_by_orig_name($name){
+function get_img_by_orig_name($name, $photos_folder_nid){
   // Формируем запрос
   $query = new EntityFieldQuery();
 
   $entities = $query->entityCondition('entity_type', 'file')
     ->fieldCondition('field_img_source_name', 'value', $name, 'CONTAINS')
+    ->fieldCondition('field_photo_folder_id', 'value', $photos_folder_nid, '=')
     ->execute();
 
   if(count($entities) == 0){

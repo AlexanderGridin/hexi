@@ -47,25 +47,50 @@ function prepare_config_html($config){
 
   if($config->operation_type == 'import_excel_data'){
     $title = 'Проверьте параметры импорта';
-    $is_importing_images = get_boolean_readable_name($config->is_importing_images);
-    $image_column_index = $config->image_column_index;
-    $is_importing_catalogue = get_boolean_readable_name($config->is_import_catalogue);
+    // $image_column_index = $config->image_column_index;
+    // $is_importing_catalogue = get_boolean_readable_name($config->is_import_catalogue);
 
-    // Получаем папку с изображениями
-    $imgs_folder_node = node_load($config->folder_with_images_nid);
-    $imgs_folder_title = $imgs_folder_node->title;
+    $config_items = "
+      <p><strong>Что необходимо сделать: </strong>$operation_type</p>
+      <p><strong>Тип товаров: </strong>$product_type</p>
+      <p><strong>Начало обработки файла (номер строки файла Excel): </strong>$start_row</p>
+      <p><strong>Конец обработки файла (номер строки файла Excel): </strong>$end_row</p>
+      <p><strong>Категория продукции в каталоге: </strong>$main_catalogue_category</p>
+    ";
 
-    $import_str = "
+    // Фотографии
+    if($config->is_importing_images){
+      $is_importing_images = get_boolean_readable_name($config->is_importing_images);
+      $config_items .= "<p><strong>Необходимо импортировать изображения?: </strong>$is_importing_images</p>";
+
+      // Получаем название папки с изображениями
+      $imgs_folder_node = node_load($config->folder_with_images_nid);
+      $imgs_folder_title = $imgs_folder_node->title;
+      $config_items .= "<p><strong>Папка с изображениями: </strong>$imgs_folder_title</p>";
+    } else {
+      $is_importing_images = get_boolean_readable_name($config->is_importing_images);
+      $config_items .= "<p><strong>Необходимо импортировать изображения?: </strong>$is_importing_images</p>";
+    }
+    
+    // Примеры интерьера
+    if($config->is_importing_interrior_examples){
+      $is_importing_interrior_examples = get_boolean_readable_name($config->is_importing_interrior_examples);
+      $config_items .= "<p><strong>Необходимо импортировать примеры интерьеров?: </strong>$is_importing_interrior_examples</p>";
+
+      // Получаем название папки с примерами интерьеров
+      $interrior_examples_folder_node = node_load($config->folder_with_interrior_examples_images_nid);
+      $interrior_examples_folder_title = $interrior_examples_folder_node->title;
+      $config_items .= "<p><strong>Папка с примерами интерьеров: </strong>$interrior_examples_folder_title</p>";
+    } else {
+      $is_importing_interrior_examples = get_boolean_readable_name($config->is_importing_interrior_examples);
+      $config_items .= "<p><strong>Необходимо импортировать примеры интерьеров?: </strong>$is_importing_interrior_examples</p>";
+    }
+
+    // Итоговая разметка
+    $config_html_string = "
       <h2>$title</h2>
       <div style=\"border: 1px solid #ddd; margin: 15px 0; box-shadow: 0 0 10px rgba(0,0,0,.3); padding: 15px;\">
-        <p><strong>Что необходимо сделать: </strong>$operation_type</p>
-        <p><strong>Тип товаров: </strong>$product_type</p>
-        <p><strong>Начало обработки файла (номер строки файла Excel): </strong>$start_row</p>
-        <p><strong>Конец обработки файла (номер строки файла Excel): </strong>$end_row</p>
-        <p><strong>Категория продукции в каталоге: </strong>$main_catalogue_category</p>
-        <p><strong>Необходимо импортировать изображения?: </strong>$is_importing_images</p>
-        <p><strong>Папка с изображениями: </strong>$imgs_folder_title</p>
-        <p><strong>Колонка с названиями изображений: </strong>$image_column_index</p>
+        $config_items
       </div>
       <p>
         <a href=\"/admin/hexi-config\" class=\"bd-button\" style=\"margin-top: 15px;\">Вернуться назад и изменить данные</a>
@@ -73,12 +98,13 @@ function prepare_config_html($config){
     ";
 
     /*
+      <p><strong>Колонка с названиями изображений: </strong>$image_column_index</p>
       <p><strong>Необходимо импортировать каталог: </strong>$is_importing_catalogue</p>
       <p><strong>Прайс содержит изображения: </strong>$is_importing_images</p>
       <p><strong>Номер ячейки с изображением: </strong>$image_column_index</p>
     */
 
-    return $import_str;
+    return $config_html_string;
   }
 
   if($config->operation_type == 'update_excel_data'){

@@ -130,6 +130,40 @@ function hexi_config(){
       '#options'       => generate_photo_folders_form_options_array(),
     );
 
+    $form['is_importing_interrior_examples'] = array(
+      '#type'          => 'radios',
+      '#title'         => 'Необходимо импортировать примеры интерьеров?',
+      '#options'       => array(
+        '0' => 'Нет',
+        '1' => 'Да'
+      ),
+      '#default_value' => '0',
+      '#required'      => false,
+      '#states' => array(
+        'visible' => array(
+          ':input[name="product_type"]' => array(
+            'value' => 'stucco',
+          ),
+        ),
+      ),
+    );
+
+    $form['folder_with_interrior_examples_images_nid'] = array(
+      '#type' => 'radios', 
+      '#title' => 'Выберите папку с изображениями примеров интерьера', 
+      '#default_value' => NULL, 
+      '#description'   => "Папка с изображениями",
+      '#states' => array(
+        'visible' => array(
+          ':input[name="is_importing_interrior_examples"]' => array(
+            'value' => '1',
+          ),
+        ),
+      ),
+      '#options'       => generate_photo_folders_form_options_array(),
+    );
+
+    /*
     $form['image_column_index'] = array(
       '#type' => 'textfield', 
       '#title' => 'Введите номер колонки, содержащей названия изображений', 
@@ -145,6 +179,7 @@ function hexi_config(){
         ),
       ),
     );
+    */
 
     $form['main_catalogue_category'] = array(
       '#type'          => 'radios',
@@ -318,11 +353,20 @@ function hexi_config(){
       form_set_error('file', 'Файл не был загружен');
     }
 
+    // Валидируем поле "Папка с фотографиями"
     if(
       (boolean)$form_state['values']['is_importing_images'] &&
       !isset($form_state['values']['folder_with_images_nid'])
     ){
       form_set_error('folder_with_images_nid', 'Выберите папку с изображениями, в которой хранятся фотографии');
+    }
+
+    // Валидируем поле "Папка с примерами интерьера"
+    if(
+      (boolean)$form_state['values']['is_importing_interrior_examples'] &&
+      !isset($form_state['values']['folder_with_interrior_examples_images_nid'])
+    ){
+      form_set_error('folder_with_interrior_examples_images_nid', 'Выберите папку с изображениями, в которой хранятся примеры интерьеров');
     }
 
     // Устанавливаем конфиги
@@ -353,7 +397,9 @@ function hexi_config(){
         $import_config->is_import_catalogue = (boolean)$form_state['values']['is_import_catalogue'];
         $import_config->catalogue_category_cell_type = $form_state['values']['catalogue_category_cell_type'];
         $import_config->folder_with_images_nid = $form_state['values']['folder_with_images_nid'];
-        $import_config->image_column_index = $form_state['values']['image_column_index'];
+        // $import_config->image_column_index = $form_state['values']['image_column_index'];
+        $import_config->is_importing_interrior_examples = (boolean)$form_state['values']['is_importing_interrior_examples'];
+        $import_config->folder_with_interrior_examples_images_nid = $form_state['values']['folder_with_interrior_examples_images_nid'];
 
         variable_set('hexi_import_config', $import_config);
         break;

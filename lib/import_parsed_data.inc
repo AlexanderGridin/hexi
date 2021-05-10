@@ -73,7 +73,7 @@ function create_product($import_config, $row){
   }
 
   if($import_config->product_type == 'stucco'){
-    $product = fill_product_type_stucco_fields_from_row($product, $row);
+    $product = fill_product_type_stucco_fields_from_row($product, $row, $import_config);
   }
   
   if($import_config->product_type == 'product_carpet'){
