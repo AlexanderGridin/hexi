@@ -37,7 +37,7 @@ function fill_product_type_stucco_fields_from_row($product, $row, $import_config
   // -- Стоимость
   $product->commerce_price['und'][0]['amount'] = $price;
   // -- Покрытие
-  $product->field_product_coating['und'][0]['value'] = $coating;
+  $product->field_product_coating['und'] = get_coating_field_values_from_string($coating);
   // Фотографии
   if($import_config->is_importing_images){
     if(!empty($photos_names)){
@@ -61,4 +61,42 @@ function fill_product_type_stucco_fields_from_row($product, $row, $import_config
   }
 
   return $product;
+}
+
+// Покрытие
+function get_coating_field_values_from_string($str){
+  if(!empty($str)){
+    $coating_names = explode('/', $str);
+    $values = array();
+
+    foreach($coating_names as $coating){
+      $is_coating_on_site = is_coating_on_site($coating);
+
+      if($is_coating_on_site){
+        $coating_term = current(taxonomy_get_term_by_name($coating));
+        array_push($values, array(
+          'tid' => $coating_term->tid,
+        ));
+      }
+
+      if(!$is_coating_on_site && !is_null($is_coating_on_site)){
+        $new_coating = add_coating_on_site($coating);
+        array_push($values, array(
+          'tid' => $new_coating->tid,
+        ));
+      }
+    }
+
+    return $values;
+  }
+}
+
+function is_coating_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'product_coating');
+}
+
+function add_coating_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Покрытия');
+
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }

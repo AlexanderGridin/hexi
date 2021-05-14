@@ -17,6 +17,7 @@ function hexi_enable(){
   taxonomy_create_vocabulary('Стили продукции', 'product_styles');
   taxonomy_create_vocabulary('Видимые цвета', 'product_visible_colors');
   taxonomy_create_vocabulary('Дизайны', 'product_design');
+  taxonomy_create_vocabulary('Покрытия', 'product_coating');
 
   // Словари по отдельным группам товаров
   // -- Инструменты
