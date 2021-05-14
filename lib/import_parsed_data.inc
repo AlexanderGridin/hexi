@@ -215,6 +215,7 @@ function get_products_group_display_by_products_group_id($products_group_id){
 }
 
 function create_display_for_single_product($product, $import_config){
+  $production = true;
   $import_id = 'hexi_import_' . $import_config->filename;
   $node_type = 'product_view';
 
@@ -230,6 +231,30 @@ function create_display_for_single_product($product, $import_config){
 
   // Получаем название товара
   $product_title = $product->title;
+
+  // Устанавливаем блок с дополнительной информацией
+  if($production){
+    switch($import_config->product_type){
+      case 'product_tools':
+        break;
+
+      case 'product_paints':
+
+        break;
+
+      case 'stucco':
+          $node->field_color_texture_info['und'][0]['moddelta'] = 'block:32';
+        break;
+
+      case 'product_carpet':
+
+        break;
+
+      case 'product_wallpapers':
+
+        break;
+    }
+  }
 
   // Заполняем поля
   $node->title = $product_title;
