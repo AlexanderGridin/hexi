@@ -65,7 +65,7 @@ function create_product($import_config, $row){
 
   // Заполняем поля в зависимости от типа товара
   if($import_config->product_type == 'product_tools'){
-    $product = fill_product_type_tools_fields_from_row($product, $row);
+    $product = fill_product_type_tools_fields_from_row($product, $row, $import_config);
   }
 
   if($import_config->product_type == 'product_paints'){

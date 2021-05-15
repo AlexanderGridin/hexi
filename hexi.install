@@ -22,6 +22,7 @@ function hexi_enable(){
   // Словари по отдельным группам товаров
   // -- Инструменты
   taxonomy_create_vocabulary('Группы инструментов', 'tools_groups');
+  taxonomy_create_vocabulary('Серии инструментов', 'tools_series');
 
   // -- Краски
   taxonomy_create_vocabulary('Подразделы красок', 'paints_subcategories');

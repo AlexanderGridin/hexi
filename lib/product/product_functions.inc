@@ -2,7 +2,6 @@
 function get_videos_array_from_string_of_url($str){
   $urls_array = explode(' ', $str);
   $videos_array = array();
-  dpm($urls_array);
 
   foreach($urls_array as $url){
     $video = array();
@@ -14,8 +13,6 @@ function get_videos_array_from_string_of_url($str){
     array_push($videos_array, $video);
   }
 
-  dpm($videos_array);
-
   if(count($videos_array) > 0){
     return $videos_array;
   } else {
@@ -26,7 +23,6 @@ function get_videos_array_from_string_of_url($str){
 function get_imgs_from_string_of_names($str, $photos_folder_nid){
   $files = array();
   $names = explode(' ', $str);
-  dpm($names);
 
   if(count($names) > 0){
     foreach($names as $name){

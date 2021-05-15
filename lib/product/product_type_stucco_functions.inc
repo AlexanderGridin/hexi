@@ -11,10 +11,13 @@ function fill_product_type_stucco_fields_from_row($product, $row, $import_config
   $product_appoint = $row['cells_data'][10];
   $product_appoint_interrior = $row['cells_data'][11];
   $price = intval(preg_replace('/\D/', '', $row['cells_data'][12])) * 100;
+
   $photos_names = $row['cells_data'][7];
   $photos_folder_nid = $import_config->folder_with_images_nid;
+
   $interrior_examples_names = $row['cells_data'][8];
   $interrior_examples_folder_nid = $import_config->folder_with_interrior_examples_images_nid;
+  
   $videos_url_str = $row['cells_data'][9];
 
   // Устанавливаем соответствие полей

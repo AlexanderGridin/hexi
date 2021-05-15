@@ -1,5 +1,5 @@
 <?php 
-function fill_product_type_tools_fields_from_row($product, $row){
+function fill_product_type_tools_fields_from_row($product, $row, $import_config){
   // Идентифицируем поля
   $brand = $row['cells_data'][0];
   $group = $row['cells_data'][1];
@@ -11,8 +11,12 @@ function fill_product_type_tools_fields_from_row($product, $row){
   $size = $row['cells_data'][7];
   $price = floatval($row['cells_data'][8]) * 100;
 
+  $photos_names = $row['cells_data'][9];
+  $photos_folder_nid = $import_config->folder_with_images_nid;
+
   // Устанавливаем соответствие полей
-  $product->title = '(' . $unique_id . ')' . ' - ' . $name;
+  // $product->title = '(' . $unique_id . ')' . ' - ' . $name;
+  $product->title = $name;
   $product->sku = $unique_id;
 
   // -- Бренд
@@ -20,7 +24,8 @@ function fill_product_type_tools_fields_from_row($product, $row){
   // -- Группа
   fill_product_type_tools_group_field($product, $group);
   // -- Серия
-  $product->field_tools_serial['und'][0]['value'] = $series;
+  fill_product_type_tools_serial_field($product, $series);
+  // $product->field_tools_serial['und'][0]['value'] = $series;
   // -- Описание
   $product->field_product_description['und'][0]['value'] = $description;
   // -- Страна
@@ -29,8 +34,40 @@ function fill_product_type_tools_fields_from_row($product, $row){
   $product->field_tools_size['und'][0]['value'] = $size;
   // -- Стоимость
   $product->commerce_price['und'][0]['amount'] = $price;
+  // Фотографии
+  if($import_config->is_importing_images){
+    if(!empty($photos_names)){
+      $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
+      $product->field_product_photo['und'] = $product_images_array;
+    }
+  }
 
   return $product;
+}
+
+// Серия
+function fill_product_type_tools_serial_field(&$product, $serial){
+  $is_serial_on_site = is_serial_on_site($serial);
+
+  if($is_serial_on_site){
+    $serial_term = current(taxonomy_get_term_by_name($serial));
+    $product->field_tools_serial['und'][0]['tid'] = $serial_term->tid;
+  } 
+  
+  if(!$is_serial_on_site && !is_null($is_serial_on_site)){
+    $new_serial_term = add_tools_serial_on_site($serial);
+    $product->field_tools_serial['und'][0]['tid'] = $new_serial_term->tid;
+  }
+}
+
+function is_serial_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'tools_series');
+}
+
+function add_tools_serial_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Серии инструментов');
+
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
 
 // Группы
@@ -48,12 +85,12 @@ function fill_product_type_tools_group_field(&$product, $group){
   }
 }
 
-function is_tools_group_on_site($group_name){
-  return is_taxonomy_term_in_vocabulary($group_name, 'tools_groups');
+function is_tools_group_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'tools_groups');
 }
 
-function add_tools_group_on_site($group_name){
-  $tools_groups_vocabulary = taxonomy_get_vocabulary_by_name('Группы инструментов');
+function add_tools_group_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Группы инструментов');
 
-  return taxonomy_create_term_in_vocabulary($group_name, $tools_groups_vocabulary->vid);
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
