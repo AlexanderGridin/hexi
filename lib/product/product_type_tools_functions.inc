@@ -15,7 +15,6 @@ function fill_product_type_tools_fields_from_row($product, $row, $import_config)
   $photos_folder_nid = $import_config->folder_with_images_nid;
 
   // Устанавливаем соответствие полей
-  // $product->title = '(' . $unique_id . ')' . ' - ' . $name;
   $product->title = $name;
   $product->sku = $unique_id;
 
@@ -27,7 +26,8 @@ function fill_product_type_tools_fields_from_row($product, $row, $import_config)
   fill_product_type_tools_serial_field($product, $series);
   // $product->field_tools_serial['und'][0]['value'] = $series;
   // -- Описание
-  $product->field_product_description['und'][0]['value'] = $description;
+  $product->field_product_description['und'][0]['value'] = format_product_type_tools_description($description);
+  $product->field_product_description['und'][0]['format'] = 'full_html';
   // -- Страна
   $product->field_product_country['und'][0]['value'] = $country;
   // -- Размер
@@ -43,6 +43,31 @@ function fill_product_type_tools_fields_from_row($product, $row, $import_config)
   }
 
   return $product;
+}
+
+// Описание
+function format_product_type_tools_description($str){
+  $exploded_str = explode("*", $str);
+
+  if(count($exploded_str) == 1){
+    return $str;
+  }
+
+  if(count($exploded_str) > 1){
+    $result = '';
+
+    $result .= "<p>$exploded_str[0]</p>";
+    $result .= "<ul>";
+
+    for($i = 1; $i < count($exploded_str); $i++){
+      $li = $exploded_str[$i];
+      $result .= "<li>$li</li>";
+    }
+
+    $result .= "</ul>";
+
+    return $result;
+  }
 }
 
 // Серия
