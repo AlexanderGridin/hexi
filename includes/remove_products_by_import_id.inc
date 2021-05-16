@@ -10,6 +10,16 @@ function remove_products_by_import_id(){
       '#required' => TRUE,
     );
 
+    $form['is_saving_images'] = array(
+      '#type'          => 'radios',
+      '#title'         => 'Оставить все файлы, связанные с товарами, на сервере?',
+      '#options'       => array(
+        '0' => 'Нет',
+        '1' => 'Да'
+      ),
+      '#default_value' => '1',
+    );
+
     $form['submit'] = array(
       '#type'  => 'submit',
       '#value' => "Удалить товары",
@@ -31,9 +41,10 @@ function remove_products_by_import_id(){
     
     // Нужно ли удалять товары?
     if(count($entities) > 0){
+      $is_saving_images = (boolean)$form_state['values']['is_saving_images'];
       // Формируем массив операций
       foreach($entities['node'] as $node){
-        $operations[] = array('remove_product_by_node', array($node->nid));
+        $operations[] = array('remove_product_by_node', array($node->nid, $is_saving_images));
       }
 
       $batch = array(
@@ -67,9 +78,37 @@ function remove_products_by_import_id_finished($success, $results, $operations){
   }
 }
 
-function remove_product_by_node($node_nid, &$context){
+function remove_product_by_node($node_nid, $is_saving_images, &$context){
   $node = node_load($node_nid);
   $node_title = $node->title;
+
+  if($is_saving_images){
+    foreach($node->field_artikul['und'] as $linked_product){
+      $product = commerce_product_load($linked_product['product_id']);
+
+      $product->field_product_photo = NULL;
+
+      switch($product->type){
+        case "product_tools":
+          break;
+
+        case "product_paints":
+          break;
+
+        case "stucco":
+          $product->field_interriors_examples = NULL;
+          break;
+
+        case "product_carpet":
+          break;
+
+        case "product_wallpapers":
+          break;
+      }
+
+      commerce_product_save($product);
+    }
+  }
 
   node_delete($node_nid);
 
