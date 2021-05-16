@@ -53,10 +53,11 @@ function get_img_by_orig_name($name, $photos_folder_nid){
 
     foreach($entities['file'] as $preloaded_file){
       $file = file_load($preloaded_file->fid);
-    }
-    
-    if(isset($file)){
-      return $file;
+      $exploded_file_source_name = explode('.', $file->field_img_source_name['und'][0]['value']);
+
+      if($exploded_file_source_name[0] == $name){
+        return $file;
+      }
     }
   }
 }
