@@ -1,6 +1,6 @@
 <?php
 function remove_products_by_import_id(){
-  function remove_products_by_import_id_form($form, &$form_state){
+  function rm_products_by_import_id_form($form, &$form_state){
     $form['import_id'] = array(
       '#type' => 'textfield', 
       '#title' => 'Введите идентификатор импорта', 
@@ -28,7 +28,7 @@ function remove_products_by_import_id(){
     return $form;
   }
 
-  function remove_products_by_import_id_form_submit($form, &$form_state){
+  function rm_products_by_import_id_form_submit($form, &$form_state){
     $import_id = $form_state['values']['import_id'];
     $is_saving_images = boolval($form_state['values']['is_saving_images']);
 
@@ -63,7 +63,7 @@ function remove_products_by_import_id(){
     }
   }
 
-  $remove_products_by_import_id_form = drupal_get_form('remove_products_by_import_id_form');
+  $remove_products_by_import_id_form = drupal_get_form('rm_products_by_import_id_form');
   return theme('remove_products_by_import_id', array(
     'remove_products_by_import_id_form' => $remove_products_by_import_id_form
   ));
@@ -83,7 +83,6 @@ function remove_product_by_node($node_nid, $is_saving_images, &$context){
   $node_title = $node->title;
 
   if($is_saving_images){
-    dpm('save-img');
     foreach($node->field_artikul['und'] as $linked_product){
       $product = commerce_product_load($linked_product['product_id']);
 
