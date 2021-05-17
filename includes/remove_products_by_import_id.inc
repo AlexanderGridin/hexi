@@ -30,6 +30,7 @@ function remove_products_by_import_id(){
 
   function remove_products_by_import_id_form_submit($form, &$form_state){
     $import_id = $form_state['values']['import_id'];
+    $is_saving_images = boolval($form_state['values']['is_saving_images']);
 
     // Формируем запрос
     $query = new EntityFieldQuery();
@@ -41,7 +42,6 @@ function remove_products_by_import_id(){
     
     // Нужно ли удалять товары?
     if(count($entities) > 0){
-      $is_saving_images = (boolean)$form_state['values']['is_saving_images'];
       // Формируем массив операций
       foreach($entities['node'] as $node){
         $operations[] = array('remove_product_by_node', array($node->nid, $is_saving_images));
@@ -83,10 +83,13 @@ function remove_product_by_node($node_nid, $is_saving_images, &$context){
   $node_title = $node->title;
 
   if($is_saving_images){
+    dpm('save-img');
     foreach($node->field_artikul['und'] as $linked_product){
       $product = commerce_product_load($linked_product['product_id']);
 
-      $product->field_product_photo = NULL;
+      foreach($product->field_product_photo['und'] as $photo){
+        file_usage_delete((object)$photo, 'file');
+      }
 
       switch($product->type){
         case "product_tools":
@@ -96,7 +99,9 @@ function remove_product_by_node($node_nid, $is_saving_images, &$context){
           break;
 
         case "stucco":
-          $product->field_interriors_examples = NULL;
+          foreach($product->field_interriors_examples['und'] as $example){
+            file_usage_delete((object)$example, 'file');
+          }
           break;
 
         case "product_carpet":

@@ -66,7 +66,7 @@ function confirm_photo_folder_clearing(){
 function remove_photo($fid, &$context){
   $file = file_load($fid);
   $file_name = $file->filename;
-  file_delete($file);
+  file_delete($file, TRUE);
   $context['results']['deleted_photos']++;
   $context['message'] = 'Удалена фотография <em><strong>' . $file_name . '</strong></em>';
 }

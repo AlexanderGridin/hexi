@@ -118,6 +118,15 @@ function hexi_menu(){
     'file' => 'includes/add_photos_in_photo_folder.inc'
   );
 
+  $items['admin/hexi-config/photo-folders/register-photos-in-folder'] = array(
+    'title' => 'Зарегистрировать фотографии из папки',
+    'description' => 'Страница регистрации фотографий из папки',
+    'page callback' => 'register_photos_in_folder',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/register_photos_in_folder.inc'
+  );
+
   $items['view-photos-in-photo-folder'] = array(
     'title' => 'Посмотреть фотографии в папке',
     'description' => 'Страница просмотра фотографий в папке',
@@ -444,6 +453,13 @@ function hexi_theme(){
       'variables' => array(
         'node_for_clearing' => NULL,
         'confirm_photo_folder_clearing_form' => NULL
+      )
+    ),
+
+    'register_photos_in_folder' => array(
+      'template' => 'templates/register_photos_in_folder',
+      'variables' => array(
+        'register_photos_in_folder_form' => NULL,
       )
     ),
 

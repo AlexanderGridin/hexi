@@ -51,3 +51,21 @@ dpm($node);
 // $str = 'https://www.youtube.com/watch?v=OPy4jIVmmcI https://www.youtube.com/watch?v=wkglhaL5jp8';
 // get_videos_array_from_string_of_url($str);
 // get_img_by_orig_name('215_1', '7597');
+
+/*
+$files = file_scan_directory('public://hexi_data/images/Ковры (фотографии)', '/(.png|.jpg|.jpeg)/');
+dpm($files);
+
+foreach($files as $file){
+  $file->field_img_source_name['und'][0]['value'] = trim($file->name);
+  $file->field_hexi_folder['und'][0]['value'] = 'Ковры (фотографии)';
+  $file->field_photo_folder_id['und'][0]['value'] = 8665;
+
+  file_save($file);
+}
+*/
+
+// var_dump(boolval('0'));
+$file = file_load(1476);
+dpm(file_usage_list($file));
+file_usage_delete($file, 'file');
