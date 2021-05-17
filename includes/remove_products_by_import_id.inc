@@ -1,6 +1,6 @@
 <?php
 function remove_products_by_import_id(){
-  function rm_products_by_import_id_form($form, &$form_state){
+  function remove_products_by_import_id_form($form, &$form_state){
     $form['import_id'] = array(
       '#type' => 'textfield', 
       '#title' => 'Введите идентификатор импорта', 
@@ -28,9 +28,9 @@ function remove_products_by_import_id(){
     return $form;
   }
 
-  function rm_products_by_import_id_form_submit($form, &$form_state){
+  function remove_products_by_import_id_form_submit($form, &$form_state){
     $import_id = $form_state['values']['import_id'];
-    $is_saving_images = boolval($form_state['values']['is_saving_images']);
+    $is_saving_images = intval($form_state['values']['is_saving_images']);
 
     // Формируем запрос
     $query = new EntityFieldQuery();
@@ -63,7 +63,7 @@ function remove_products_by_import_id(){
     }
   }
 
-  $remove_products_by_import_id_form = drupal_get_form('rm_products_by_import_id_form');
+  $remove_products_by_import_id_form = drupal_get_form('remove_products_by_import_id_form');
   return theme('remove_products_by_import_id', array(
     'remove_products_by_import_id_form' => $remove_products_by_import_id_form
   ));

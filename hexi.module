@@ -71,7 +71,7 @@ function hexi_menu(){
     'file' => 'includes/clear_taxonomy_vocabulary.inc'
   );
 
-  $items['admin/hexi-config/tools/rm-products-by-import-id'] = array(
+  $items['admin/hexi-config/tools/remove-products-by-import-id'] = array(
     'title' => 'Удалить товары по идентификатору импорта',
     'description' => 'Страница удаления товаров по идентификатору импорта',
     'page callback' => 'remove_products_by_import_id',
