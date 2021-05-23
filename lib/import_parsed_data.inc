@@ -77,7 +77,7 @@ function create_product($import_config, $row){
   }
   
   if($import_config->product_type == 'product_carpet'){
-    $product = fill_product_type_carpet_fields_from_row($product, $row);
+    $product = fill_product_type_carpet_fields_from_row($product, $row, $import_config);
   }
 
   if($import_config->product_type == 'product_wallpapers'){
@@ -112,7 +112,7 @@ function create_product_display($import_config, $row){
       break;
 
     case 'product_carpet':
-      $product = commerce_product_load_by_sku($row['cells_data'][6]);
+      $product = commerce_product_load_by_sku($row['cells_data'][7]);
       break;
 
     case 'product_wallpapers':

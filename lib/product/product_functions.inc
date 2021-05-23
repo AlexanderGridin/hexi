@@ -20,9 +20,9 @@ function get_videos_array_from_string_of_url($str){
   }
 }
 
-function get_imgs_from_string_of_names($str, $photos_folder_nid){
+function get_imgs_from_string_of_names($str, $photos_folder_nid, $separator = ' '){
   $files = array();
-  $names = explode(' ', $str);
+  $names = explode($separator, $str);
 
   if(count($names) > 0){
     foreach($names as $name){
