@@ -62,6 +62,51 @@ function get_img_by_orig_name($name, $photos_folder_nid){
   }
 }
 
+function get_documents_from_string_of_names($str, $folder_nid, $separator = ' '){
+  $files = array();
+  $names = explode($separator, $str);
+
+  if(count($names) > 0){
+    foreach($names as $name){
+      array_push($files, (array)get_document_by_orig_name($name, $folder_nid));
+    }
+
+    return $files;
+  } else {
+    return NULL;
+  }
+}
+
+function get_document_by_orig_name($name, $folder_nid){
+  // Формируем запрос
+  $query = new EntityFieldQuery();
+
+  $entities = $query->entityCondition('entity_type', 'file')
+    ->fieldCondition('field_img_source_name', 'value', $name, 'CONTAINS')
+    ->fieldCondition('field_photo_folder_id', 'value', $folder_nid, '=')
+    ->execute();
+
+  if(count($entities) == 0){
+    return NULL;
+  } 
+  
+  if(count($entities) == 1){
+    $file = NULL;
+
+    foreach($entities['file'] as $preloaded_file){
+      $file = file_load($preloaded_file->fid);
+      $exploded_file_source_name = explode('.', $file->field_img_source_name['und'][0]['value']);
+
+      if($exploded_file_source_name[0] == $name){
+        $file->display = '1';
+        $file->description = '';
+
+        return $file;
+      }
+    }
+  }
+}
+
 // Дизайн
 function get_design_field_values_from_string($str){
   if(!empty($str)){

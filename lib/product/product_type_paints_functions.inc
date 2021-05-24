@@ -20,6 +20,9 @@ function fill_product_type_paints_fields_from_row($product, $row, $import_config
   $photos_names = $row['cells_data'][15];
   $photos_folder_nid = $import_config->folder_with_images_nid;
 
+  $specifications_names = $row['cells_data'][16];
+  $specifications_folder_nid = $import_config->folder_with_specifications_nid;
+
   // Устанавливаем соответствие полей
   $product->title = $name_and_short_desc;
   $product->sku = $unique_id;
@@ -77,6 +80,14 @@ function fill_product_type_paints_fields_from_row($product, $row, $import_config
     if(!empty($photos_names)){
       $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
       $product->field_product_photo['und'] = $product_images_array;
+    }
+  }
+
+  // -- Технические характеристики
+  if($import_config->is_importing_specifications){
+    if(!empty($specifications_names)){
+      $product_specifications_array = get_documents_from_string_of_names($specifications_names, $specifications_folder_nid);
+      $product->field_product_specifications['und'] = $product_specifications_array;
     }
   }
 

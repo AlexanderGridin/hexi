@@ -4,7 +4,7 @@
  * Изначально данное поле у сущности файла отсутствует, поэтому оно должно быть создано через админку у типа файла Document.
  */
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
-module_load_include('inc', 'hexi', '/lib/photo_folders_functions');
+module_load_include('inc', 'hexi', '/lib/folders_functions');
 
 function hexi_config(){
   delete_variable_from_db('hexi_import_config');
@@ -99,7 +99,7 @@ function hexi_config(){
 
     $form['is_importing_images'] = array(
       '#type'          => 'radios',
-      '#title'         => 'Необходимо импортировать изображения?',
+      '#title'         => 'Необходимо импортировать фотографии?',
       '#options'       => array(
         '0' => 'Нет',
         '1' => 'Да'
@@ -176,6 +176,37 @@ function hexi_config(){
         'visible' => array(
           ':input[name="product_type"]' => array(
             'value' => 'stucco',
+          ),
+        ),
+      ),
+    );
+
+    $form['is_importing_specifications'] = array(
+      '#type'          => 'radios',
+      '#title'         => 'Необходимо импортировать технические характеристики?',
+      '#options'       => array(
+        '0' => 'Нет',
+        '1' => 'Да'
+      ),
+      '#default_value' => '0',
+      '#required'      => false,
+      '#states' => array(
+        'visible' => array(
+          ':input[name="product_type"]' => array(
+            'value' => 'product_paints',
+          ),
+        ),
+      ),
+    );
+
+    $form['folder_with_specifications_nid'] = array(
+      '#type'          => 'radios',
+      '#title'         => 'Выберите папку с техническими характеристиками',
+      '#options'       => generate_documents_folders_form_options_array(),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="is_importing_specifications"]' => array(
+            'value' => '1',
           ),
         ),
       ),
@@ -387,6 +418,14 @@ function hexi_config(){
       form_set_error('folder_with_interrior_examples_images_nid', 'Выберите папку с изображениями, в которой хранятся примеры интерьеров');
     }
 
+    // Валидируем поле "Папка с техническими характеристиками"
+    if(
+      (boolean)$form_state['values']['is_importing_specifications'] &&
+      !isset($form_state['values']['folder_with_specifications_nid'])
+    ){
+      form_set_error('folder_with_specifications_nid', 'Выберите папку, в которой хранятся файлы с техническими характеристиками товаров.');
+    }
+
     // Устанавливаем конфиги
     switch ($form_state['values']['operation_type']){
       case 'import_excel_data':
@@ -419,6 +458,8 @@ function hexi_config(){
         $import_config->is_importing_interrior_examples = (boolean)$form_state['values']['is_importing_interrior_examples'];
         $import_config->folder_with_interrior_examples_images_nid = $form_state['values']['folder_with_interrior_examples_images_nid'];
         $import_config->is_importing_video = (boolean)$form_state['values']['is_importing_video'];
+        $import_config->is_importing_specifications = (boolean)$form_state['values']['is_importing_specifications'];
+        $import_config->folder_with_specifications_nid = $form_state['values']['folder_with_specifications_nid'];
 
         variable_set('hexi_import_config', $import_config);
         break;
