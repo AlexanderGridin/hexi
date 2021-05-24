@@ -69,7 +69,7 @@ function create_product($import_config, $row){
   }
 
   if($import_config->product_type == 'product_paints'){
-    $product = fill_product_type_paints_fields_from_row($product, $row);
+    $product = fill_product_type_paints_fields_from_row($product, $row, $import_config);
   }
 
   if($import_config->product_type == 'stucco'){
@@ -104,7 +104,7 @@ function create_product_display($import_config, $row){
       break;
 
     case 'product_paints':
-      $product = commerce_product_load_by_sku($row['cells_data'][3]);
+      $product = commerce_product_load_by_sku($row['cells_data'][5]);
       break;
 
     case 'stucco':

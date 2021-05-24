@@ -32,6 +32,7 @@ function hexi_enable(){
 
   // -- Обои
   taxonomy_create_vocabulary('Типы обоев', 'wallpapers_types');
+  taxonomy_create_vocabulary('Серии обоев', 'wallpapers_series');
 
   /* -------------------------------- */
   /* Создаем необходимые папки

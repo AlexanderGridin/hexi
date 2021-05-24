@@ -1,18 +1,24 @@
 <?php 
-function fill_product_type_paints_fields_from_row($product, $row){
+function fill_product_type_paints_fields_from_row($product, $row, $import_config){
   // Идентифицируем поля
   $brand = $row['cells_data'][0];
-  $subcategory = $row['cells_data'][1];
-  $name_and_short_desc = $row['cells_data'][2];
-  $unique_id = $row['cells_data'][3];
-  $volume = $row['cells_data'][4];
-  $base = $row['cells_data'][5];
-  $price = floatval($row['cells_data'][6]) * 100;
-  $gloss_degree = $row['cells_data'][7];
-  $resistance_to_wash = $row['cells_data'][8];
-  $product_appoint = $row['cells_data'][9];
-  $product_appoint_interrior = $row['cells_data'][10];
-  $safe_for_children = $row['cells_data'][11];
+  $group = $row['cells_data'][1];
+  $country = $row['cells_data'][2];
+  $name_and_short_desc = $row['cells_data'][3];
+  $series = $row['cells_data'][4];
+  $unique_id = $row['cells_data'][5];
+  $volume = $row['cells_data'][6];
+  $other_volumes = $row['cells_data'][7];
+  $base = $row['cells_data'][8];
+  $price = floatval($row['cells_data'][9]) * 100;
+  $gloss_degree = $row['cells_data'][10];
+  $resistance_to_wash = $row['cells_data'][11];
+  $product_appoint = $row['cells_data'][12];
+  $product_appoint_interrior = $row['cells_data'][13];
+  $safe_for_children = $row['cells_data'][14];
+
+  $photos_names = $row['cells_data'][15];
+  $photos_folder_nid = $import_config->folder_with_images_nid;
 
   // Устанавливаем соответствие полей
   $product->title = $name_and_short_desc;
@@ -21,8 +27,14 @@ function fill_product_type_paints_fields_from_row($product, $row){
   // -- Бренд
   fill_product_brand_field($product, $brand);
 
-  // -- Подраздел
-  fill_product_type_paint_subcategory_field($product, $subcategory);
+  // -- Группа
+  fill_product_type_paint_subcategory_field($product, $group);
+
+  // -- Страна
+  $product->field_product_country['und'][0]['value'] = $country;
+
+  // -- Серия
+  fill_product_type_wallpaper_series_field($product, $series);
 
   // -- Назначение краски
   $product->field_product_appoint['und'] = get_appoint_field_values_from_string($product_appoint);
@@ -32,6 +44,8 @@ function fill_product_type_paints_fields_from_row($product, $row){
 
   // -- Объем
   $product->field_product_volume['und'][0]['value'] = $volume;
+  // -- Другие объемы
+  $product->field_product_other_volumes['und'][0]['value'] = $other_volumes;
   // -- База
   if(!empty($base)){
     $product->field_product_base['und'][0]['value'] = $base;
@@ -58,7 +72,40 @@ function fill_product_type_paints_fields_from_row($product, $row){
     $product->field_product_safe_for_children['und'][0]['value'] = 1;
   }
 
+  // -- Фотографии
+  if($import_config->is_importing_images){
+    if(!empty($photos_names)){
+      $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid);
+      $product->field_product_photo['und'] = $product_images_array;
+    }
+  }
+
   return $product;
+}
+
+// Серии
+function fill_product_type_wallpaper_series_field(&$product, $series){
+  $is_series_on_site = is_wallpaper_series_on_site($series);
+
+  if($is_series_on_site){
+    $series_term = current(taxonomy_get_term_by_name($series));
+    $product->field_product_wallpaper_series['und'][0]['tid'] = $series_term->tid;
+  } 
+  
+  if(!$is_series_on_site && !is_null($is_series_on_site)){
+    $new_series_term = add_wallpaper_series_on_site($series);
+    $product->field_product_wallpaper_series['und'][0]['tid'] = $new_series_term->tid;
+  }
+}
+
+function is_wallpaper_series_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'wallpapers_series');
+}
+
+function add_wallpaper_series_on_site($name){
+  $wallpaper_series_vocabulary = taxonomy_get_vocabulary_by_name('Серии обоев');
+
+  return taxonomy_create_term_in_vocabulary($name, $wallpaper_series_vocabulary->vid);
 }
 
 // Подразделы
