@@ -99,59 +99,77 @@ function hexi_menu(){
     'file' => 'includes/check_products_sku_for_duplicates_in_file.inc'
   );
 
-  // PHOTO FOLDERS
-  $items['admin/hexi-config/photo-folders'] = array(
+  // FOLDERS
+  $items['admin/hexi-config/folders'] = array(
+    'title' => 'Папки',
+    'description' => 'Страница просмотра папок',
+    'page callback' => 'folders',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/folders/folders.inc'
+  );
+
+  $items['admin/hexi-config/folders/photo-folders'] = array(
     'title' => 'Папки с фотографиями',
     'description' => 'Страница просмотра папок с фотографиями',
     'page callback' => 'photo_folders',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/photo_folders.inc'
+    'file' => 'includes/folders/photo_folders.inc'
   );
 
-  $items['admin/hexi-config/photo-folders/add-photos-in-photo-folder'] = array(
-    'title' => 'Добавить фотографии в папку',
-    'description' => 'Страница добавления фотографий в папку',
-    'page callback' => 'add_photos_in_photo_folder',
+  $items['admin/hexi-config/folders/documents-folders'] = array(
+    'title' => 'Папки с документами',
+    'description' => 'Страница просмотра папок с документами',
+    'page callback' => 'documents_folders',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/add_photos_in_photo_folder.inc'
+    'file' => 'includes/folders/documents_folders.inc'
   );
 
-  $items['admin/hexi-config/photo-folders/register-photos-in-folder'] = array(
-    'title' => 'Зарегистрировать фотографии из папки',
-    'description' => 'Страница регистрации фотографий из папки',
-    'page callback' => 'register_photos_in_folder',
+  $items['admin/hexi-config/folders/add-files-in-folder'] = array(
+    'title' => 'Добавить файлы в папку',
+    'description' => 'Страница добавления файлов в папку',
+    'page callback' => 'add_files_in_folder',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/register_photos_in_folder.inc'
+    'file' => 'includes/folders/add_files_in_folder.inc'
   );
 
-  $items['view-photos-in-photo-folder'] = array(
-    'title' => 'Посмотреть фотографии в папке',
-    'description' => 'Страница просмотра фотографий в папке',
-    'page callback' => 'view_photos_in_photo_folder',
+  $items['admin/hexi-config/folders/register-files-in-folder'] = array(
+    'title' => 'Зарегистрировать файлы в папке',
+    'description' => 'Страница регистрации файлов в папке',
+    'page callback' => 'register_files_in_folder',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/view_photos_in_photo_folder.inc'
+    'file' => 'includes/folders/register_files_in_folder.inc'
   );
 
-  $items['confirm-photo-folder-delete'] = array(
-    'title' => 'Подтверждение удаления папки с фотографиями',
+  $items['view-files-in-folder'] = array(
+    'title' => 'Посмотреть файлы в папке',
+    'description' => 'Страница просмотра файлов в папке',
+    'page callback' => 'view_files_in_folder',
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'user_is_administrator',
+    'file' => 'includes/folders/view_files_in_folder.inc'
+  );
+
+  $items['confirm-folder-delete'] = array(
+    'title' => 'Подтверждение удаления папки с файлами',
     'description' => 'Страница подтверждения удаления папки с фотографиями',
-    'page callback' => 'confirm_photo_folder_delete',
+    'page callback' => 'confirm_folder_delete',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/confirm_photo_folder_delete.inc'
+    'file' => 'includes/folders/confirm_folder_delete.inc'
   );
 
-  $items['confirm-photo-folder-clearing'] = array(
-    'title' => 'Подтверждение удаления папки с фотографиями',
-    'description' => 'Страница подтверждения удаления папки с фотографиями',
-    'page callback' => 'confirm_photo_folder_clearing',
+  $items['confirm-folder-clearing'] = array(
+    'title' => 'Подтверждение очистки папки с файлами',
+    'description' => 'Страница подтверждения очистки папки с файлами',
+    'page callback' => 'confirm_folder_clearing',
     'type' => MENU_LOCAL_ACTION,
     'access callback' => 'user_is_administrator',
-    'file' => 'includes/confirm_photo_folder_clearing.inc'
+    'file' => 'includes/folders/confirm_folder_clearing.inc'
   );
 
   // DEV
@@ -417,49 +435,62 @@ function hexi_theme(){
       )
     ),
 
+    // FOLDERS
+    'folders' => array(
+      'template' => 'templates/folders/folders',
+    ),
+
     'photo_folders' => array(
-      'template' => 'templates/photo_folders',
+      'template' => 'templates/folders/photo_folders',
       'variables' => array(
         'add_photo_folder_form' => NULL,
         'available_photo_folders' => NULL
       )
     ),
 
-    'add_photos_in_photo_folder' => array(
-      'template' => 'templates/add_photos_in_photo_folder',
+    'documents_folders' => array(
+      'template' => 'templates/folders/documents_folders',
       'variables' => array(
-        'add_photos_in_photo_folder_form' => NULL,
+        'add_documents_folder_form' => NULL,
+        'available_documents_folders' => NULL
       )
     ),
 
-    'view_photos_in_photo_folder' => array(
-      'template' => 'templates/view_photos_in_photo_folder',
+    'add_files_in_folder' => array(
+      'template' => 'templates/folders/add_files_in_folder',
+      'variables' => array(
+        'add_files_in_folder_form' => NULL,
+      )
+    ),
+
+    'view_files_in_folder' => array(
+      'template' => 'templates/folders/view_files_in_folder',
       'variables' => array(
         'folder_node' => NULL,
-        'folder_photos' => NULL
+        'folder_files' => NULL
       )
     ),
 
-    'confirm_photo_folder_delete' => array(
-      'template' => 'templates/confirm_photo_folder_delete',
+    'confirm_folder_delete' => array(
+      'template' => 'templates/folders/confirm_folder_delete',
       'variables' => array(
         'node_for_delete' => NULL,
-        'confirm_photo_folder_delete_form' => NULL
+        'confirm_folder_delete_form' => NULL
       )
     ),
 
-    'confirm_photo_folder_clearing' => array(
-      'template' => 'templates/confirm_photo_folder_clearing',
+    'confirm_folder_clearing' => array(
+      'template' => 'templates/folders/confirm_folder_clearing',
       'variables' => array(
         'node_for_clearing' => NULL,
-        'confirm_photo_folder_clearing_form' => NULL
+        'confirm_folder_clearing_form' => NULL
       )
     ),
 
-    'register_photos_in_folder' => array(
-      'template' => 'templates/register_photos_in_folder',
+    'register_files_in_folder' => array(
+      'template' => 'templates/folders/register_files_in_folder',
       'variables' => array(
-        'register_photos_in_folder_form' => NULL,
+        'register_files_in_folder_form' => NULL,
       )
     ),
 

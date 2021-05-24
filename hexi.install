@@ -42,7 +42,8 @@ function hexi_enable(){
   drupal_mkdir('public://hexi_data/price_files');
   // drupal_mkdir('public://hexi_data/price_files/generated_skus');
   
-  // drupal_mkdir('public://hexi_data/images');
+  drupal_mkdir('public://hexi_data/images');
+  drupal_mkdir('public://hexi_data/documents');
   // drupal_mkdir('public://hexi_data/images/1');
   // drupal_mkdir('public://hexi_data/images/2');
 

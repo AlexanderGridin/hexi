@@ -1,21 +1,12 @@
 <?php 
 module_load_include('inc', 'hexi', '/lib/hexi_tools');
-module_load_include('inc', 'hexi', '/lib/photo_folders_functions');
+module_load_include('inc', 'hexi', '/lib/folders_functions');
 
-function photo_folders(){
-  variable_del('hexi_photo_folder_nid');
+function documents_folders(){
+  variable_del('hexi_files_folder_nid');
+  variable_del('hexi_files_folder_files_type_to_load');
 
-  function add_photo_folder_form($form, &$form_state){
-    /*
-    $form['file'] = array(
-      '#title'         => "Фотографии для загрузки",
-      '#description'   => "Максимальный размер загрузки <strong>" . get_upload_max_size() . ".</strong>",
-      '#type'          => 'file',
-      '#attributes' => array('multiple' => 'multiple'),
-      '#name' => 'files[]'
-    );
-    */
-
+  function add_documents_folder_form($form, &$form_state){
     $form['folder_name'] = array(
       '#type' => 'textfield', 
       '#title' => 'Название папки', 
@@ -27,29 +18,29 @@ function photo_folders(){
     
     $form['submit'] = array(
       '#type'  => 'submit',
-      '#value' => "Добавить папку с фотографиями",
+      '#value' => "Добавить папку с документами",
     );
     
     return $form;
   }
 
-  function add_photo_folder_form_submit($form, &$form_state){
+  function add_documents_folder_form_submit($form, &$form_state){
     $folder_name = $form_state['values']['folder_name'];
-    $folder_path = 'public://hexi_data/images/' . $folder_name;
+    $folder_path = 'public://hexi_data/documents/' . $folder_name;
 
     /**
      * Проверяем папку на предмет наличия на сайте
      * В качестве сущности, отражающей папку для фото, используется нода типа photo_folder (Папка с фотографиями)
      */
 
-    $folder_from_site = get_photo_folder_by_name($folder_name);
+    $folder_from_site = get_documents_folder_by_name($folder_name);
 
     if(!$folder_from_site){
       drupal_mkdir($folder_path);
 
       // Создаем ноду
       $node = new stdClass();
-      $node->type = 'photo_folder';
+      $node->type = 'documents_folder';
 
       node_object_prepare($node);
 
@@ -63,10 +54,10 @@ function photo_folders(){
     }
   }
 
-  $available_photo_folders = get_photo_folders_per_page(20);
-  $add_photo_folder_form = drupal_get_form('add_photo_folder_form');
-  return theme('photo_folders', array(
-    'add_photo_folder_form' => $add_photo_folder_form,
-    'available_photo_folders' => $available_photo_folders
+  $available_documents_folders = get_documents_folders_per_page(20);
+  $add_documents_folder_form = drupal_get_form('add_documents_folder_form');
+  return theme('documents_folders', array(
+    'add_documents_folder_form' => $add_documents_folder_form,
+    'available_documents_folders' => $available_documents_folders
   ));
 }
