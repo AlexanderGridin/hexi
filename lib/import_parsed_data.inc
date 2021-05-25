@@ -215,7 +215,7 @@ function get_products_group_display_by_products_group_id($products_group_id){
 }
 
 function create_display_for_single_product($product, $import_config){
-  $production = false;
+  $production = true;
   $import_id = 'hexi_import_' . $import_config->filename;
   $node_type = 'product_view';
 
@@ -231,6 +231,8 @@ function create_display_for_single_product($product, $import_config){
 
   // Получаем название товара
   $product_title = $product->title;
+  // Получаем tid Бренда
+  $product_brand_tid = $product->field_product_brand['und'][0]['tid'];
 
   // Устанавливаем блок с дополнительной информацией
   if($production){
@@ -239,7 +241,15 @@ function create_display_for_single_product($product, $import_config){
         break;
 
       case 'product_paints':
+        // Sikkens
+        if($product_brand_tid == '84'){
+          $node->field_color_texture_info['und'][0]['moddelta'] = 'block:33';
+        }
 
+        // Pratta Exclusive
+        if($product_brand_tid == '45'){
+          $node->field_color_texture_info['und'][0]['moddelta'] = 'block:34';
+        }
         break;
 
       case 'stucco':
