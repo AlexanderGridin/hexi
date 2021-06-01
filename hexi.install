@@ -33,6 +33,7 @@ function hexi_enable(){
   // -- Обои
   taxonomy_create_vocabulary('Типы обоев', 'wallpapers_types');
   taxonomy_create_vocabulary('Серии обоев', 'wallpapers_series');
+  taxonomy_create_vocabulary('Материалы обоев', 'wallpapers_materials');
 
   /* -------------------------------- */
   /* Создаем необходимые папки
@@ -40,12 +41,9 @@ function hexi_enable(){
   drupal_mkdir('public://hexi_data');
 
   drupal_mkdir('public://hexi_data/price_files');
-  // drupal_mkdir('public://hexi_data/price_files/generated_skus');
   
   drupal_mkdir('public://hexi_data/images');
   drupal_mkdir('public://hexi_data/documents');
-  // drupal_mkdir('public://hexi_data/images/1');
-  // drupal_mkdir('public://hexi_data/images/2');
 
   menu_rebuild();
   cache_clear_all();

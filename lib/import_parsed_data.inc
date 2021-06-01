@@ -81,7 +81,7 @@ function create_product($import_config, $row){
   }
 
   if($import_config->product_type == 'product_wallpapers'){
-    $product = fill_product_type_wallpapers_fields_from_row($product, $row);
+    $product = fill_product_type_wallpapers_fields_from_row($product, $row, $import_config);
   }
 
   // Заполняем общие поля
@@ -125,7 +125,7 @@ function create_product_display($import_config, $row){
     create_display_for_single_product($product, $import_config);
   }
 
-  // Если товар есть на сайте и это ковер - разбираемся с этой ситуацией
+  // Если товар есть на сайте и это ковер - в ноду подгружаются несколько товаров т.к. несколько размеров ковров
   if(isset($product) && $import_config->product_type == 'product_carpet'){
     handle_display_for_groupped_product($product, $import_config);
   }
@@ -215,7 +215,8 @@ function get_products_group_display_by_products_group_id($products_group_id){
 }
 
 function create_display_for_single_product($product, $import_config){
-  $production = true;
+  $production = false;
+  
   $import_id = 'hexi_import_' . $import_config->filename;
   $node_type = 'product_view';
 
@@ -253,7 +254,7 @@ function create_display_for_single_product($product, $import_config){
         break;
 
       case 'stucco':
-          $node->field_color_texture_info['und'][0]['moddelta'] = 'block:32';
+        $node->field_color_texture_info['und'][0]['moddelta'] = 'block:32';
         break;
 
       case 'product_carpet':
@@ -261,7 +262,7 @@ function create_display_for_single_product($product, $import_config){
         break;
 
       case 'product_wallpapers':
-
+        $node->field_color_texture_info['und'][0]['moddelta'] = 'block:26';
         break;
     }
   }

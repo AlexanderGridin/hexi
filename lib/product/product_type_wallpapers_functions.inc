@@ -1,5 +1,5 @@
 <?php 
-function fill_product_type_wallpapers_fields_from_row($product, $row){
+function fill_product_type_wallpapers_fields_from_row($product, $row, $import_config){
   // Идентифицируем поля
   $brand = $row['cells_data'][0];
   $collection = $row['cells_data'][1];
@@ -15,6 +15,9 @@ function fill_product_type_wallpapers_fields_from_row($product, $row){
   $material = $row['cells_data'][11];
   $visible_color = $row['cells_data'][12];
   $country = $row['cells_data'][13];
+
+  $photos_names = $row['cells_data'][14];
+  $photos_folder_nid = $import_config->folder_with_images_nid;
 
 
   // Устанавливаем соответствие полей
@@ -46,8 +49,44 @@ function fill_product_type_wallpapers_fields_from_row($product, $row){
   $product->field_product_design['und'] = get_design_field_values_from_string($design);
   // -- Тип
   fill_wallpapers_type_field($product, $type);
+  // Фотографии
+  if($import_config->is_importing_images){
+    if(!empty($photos_names)){
+      $product_images_array = get_imgs_from_string_of_names($photos_names, $photos_folder_nid, "; ");
+      $product->field_product_photo['und'] = $product_images_array;
+    }
+  }
+  // -- Материал
+  fill_wallpapers_material_field($product, $material);
 
   return $product;
+}
+
+// Материал
+function fill_wallpapers_material_field(&$product, $maetrial){
+  $is_material_on_site = is_wallpaper_material_on_site($maetrial);
+
+  if($is_material_on_site){
+    $material_term = current(taxonomy_get_term_by_name($maetrial));
+    $product->field_product_material['und'][0]['tid'] = $material_term->tid;
+  }
+  
+  if(!$is_material_on_site && !is_null($is_material_on_site)){
+    $new_material_term = add_wallpaper_material_on_site($maetrial);
+    $product->field_product_material['und'][0]['tid'] = $new_material_term->tid;
+  }
+
+  return $product;
+}
+
+function is_wallpaper_material_on_site($name){
+  return is_taxonomy_term_in_vocabulary($name, 'wallpapers_materials');
+}
+
+function add_wallpaper_material_on_site($name){
+  $vocabulary = taxonomy_get_vocabulary_by_name('Материалы обоев');
+
+  return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
 }
 
 // Типы обоев
