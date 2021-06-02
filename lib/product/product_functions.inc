@@ -147,6 +147,9 @@ function add_design_on_site($name){
 
 // Cтили продукции
 function fill_product_style_field(&$product, $style){
+  $product->field_product_style['und'] = get_product_style_field_values_from_string($style);
+
+  /*
   $is_product_style_on_site = is_product_style_on_site($style);
 
   if($is_product_style_on_site){
@@ -158,6 +161,7 @@ function fill_product_style_field(&$product, $style){
     $new_style_term = add_product_style_on_site($style);
     $product->field_product_style['und'][0]['tid'] = $new_style_term->tid;
   }
+  */
 
   return $product;
 }
@@ -170,6 +174,33 @@ function add_product_style_on_site($name){
   $vocabulary = taxonomy_get_vocabulary_by_name('Стили продукции');
 
   return taxonomy_create_term_in_vocabulary($name, $vocabulary->vid);
+}
+
+function get_product_style_field_values_from_string($str){
+  if(!empty($str)){
+    $style_names = explode('/', $str);
+    $values = array();
+
+    foreach($style_names as $style){
+      $is_product_style_on_site = is_product_style_on_site($style);
+
+      if($is_product_style_on_site){
+        $product_style_term = current(taxonomy_get_term_by_name($style));
+        array_push($values, array(
+          'tid' => $product_style_term->tid,
+        ));
+      }
+
+      if(!$is_product_style_on_site && !is_null($is_product_style_on_site)){
+        $new_style = add_product_style_on_site($style);
+        array_push($values, array(
+          'tid' => $new_style->tid,
+        ));
+      }
+    }
+
+    return $values;
+  }
 }
 
 // Коллекции

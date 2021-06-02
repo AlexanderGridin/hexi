@@ -215,7 +215,7 @@ function get_products_group_display_by_products_group_id($products_group_id){
 }
 
 function create_display_for_single_product($product, $import_config){
-  $production = false;
+  $production = true;
   
   $import_id = 'hexi_import_' . $import_config->filename;
   $node_type = 'product_view';
